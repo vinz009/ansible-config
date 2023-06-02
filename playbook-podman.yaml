@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  tasks: 
+    - name: Pull image with podman
+      containers.podman.podman_image:
+        name: "docker.io/library/{{ item }}"
+        tag: latest
+      with_items:
+        - busybox
+        - hello-world
