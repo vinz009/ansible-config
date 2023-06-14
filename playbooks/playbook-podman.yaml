@@ -8,7 +8,9 @@
       with_items:
         - busybox
         - hello-world
-	- mysql
-	- httpd
-	- adminer
-	- phpmyadmin
+        - mysql
+        - httpd
+        - adminer
+        - phpmyadmin
+        - python
+        - node
