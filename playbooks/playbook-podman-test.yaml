@@ -1,14 +1,10 @@
 ---
 - hosts: localhost
-  tasks: 
+  tasks:
     - name: Pull image with podman
       containers.podman.podman_image:
         name: "docker.io/library/{{ item }}"
         tag: latest
       with_items:
-        - mysql
-        - httpd
-        - adminer
-        - phpmyadmin
-        - python
-        - node
+        - busybox
+        - hello-world
