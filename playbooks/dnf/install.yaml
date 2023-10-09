@@ -1,0 +1,14 @@
+---
+- name: Install dnf packages
+  hosts: localhost
+  gather_facts: yes
+
+  tasks:
+    - name: Package lists
+      become: yes
+      ansible.builtin.dnf:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - git
+        - zathura
