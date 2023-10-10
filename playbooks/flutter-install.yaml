@@ -1,0 +1,36 @@
+- name: Manage a local linux flutter installation
+  hosts: localhost
+  gather_facts: yes
+
+  tasks:
+    - name: Command line tools pre-requisites
+      become: yes
+      ansible.builtin.dnf:
+        name: 
+          - bash
+          - curl
+          - file
+          - git
+          - unzip
+          - which
+          - xz
+          - zip
+          - mesa-libGLU
+        state: present
+        update_cache: yes
+
+    - name: Create temporary directory
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/development"
+        state: directory
+        mode: 0775
+
+    - name: Download source code
+      ansible.builtin.unarchive:
+        remote_src: yes
+        src: "https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.13.6-stable.tar.xz"
+        dest: "{{ ansible_env.HOME }}/development/"
+
+    - name: Verify flutter install
+      ansible.builtin.shell:
+        cmd: flutter doctor
