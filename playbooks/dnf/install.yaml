@@ -10,5 +10,4 @@
         name: "{{ item }}"
         state: present
       loop:
-        - git
-        - zathura
+        "{{ lookup('file', 'packages.txt').splitlines() }}"
