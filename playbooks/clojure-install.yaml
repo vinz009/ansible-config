@@ -1,0 +1,14 @@
+- name: local clojure installation
+  hosts: localhost
+  gather_facts: yes
+  
+  tasks:
+    - name: download remote install script
+      ansible.builtin.get_url:
+        url: https://github.com/clojure/brew-install/releases/latest/download/linux-install.sh
+        dest: "{{ ansible_env.HOME }}"
+        mode: '0755'
+    - name: execute script
+      become: yes
+      ansible.builtin.script:
+        cmd: "{{ ansible_env.HOME }}/linux-install.sh"
