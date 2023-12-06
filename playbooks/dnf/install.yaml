@@ -6,13 +6,13 @@
   tasks:
     - name: load variables
       ansible.builtin.include_vars:
-        file: vars/packages.yaml
+        dir: vars
         name: packages
     - name: Package lists
       become: yes
       ansible.builtin.dnf:
         name: "{{ item }}"
         state: present
-      loop: "{{ packages.generic }}"
-          #  - "{{ lookup('file', 'packages.txt').splitlines() }}"
-          #        "{{ lookup('file', 'clojure.txt').splitlines() }}"
+      loop:
+        - "{{ packages.generic }}"
+        - "{{ packages.clojure }}"
