@@ -1,0 +1,17 @@
+---
+generic:
+- git
+- zathura
+- firefox
+- cpu-x
+- podman
+- python3
+- rbenv
+- vim-enhanced
+- chromium-browser
+- qutebrowser
+- lynx
+- i3
+- i3status
+- dmenu
+- redshift

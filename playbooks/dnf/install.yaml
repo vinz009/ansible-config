@@ -4,10 +4,15 @@
   gather_facts: yes
 
   tasks:
+    - name: load variables
+      ansible.builtin.include_vars:
+        file: vars/packages.yaml
+        name: packages
     - name: Package lists
       become: yes
       ansible.builtin.dnf:
         name: "{{ item }}"
         state: present
-      loop:
-        "{{ lookup('file', 'packages.txt').splitlines() }}"
+      loop: "{{ packages.generic }}"
+          #  - "{{ lookup('file', 'packages.txt').splitlines() }}"
+          #        "{{ lookup('file', 'clojure.txt').splitlines() }}"
