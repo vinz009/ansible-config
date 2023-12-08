@@ -1,0 +1,14 @@
+---
+- name: local minikube RPM package installation
+  hosts: localhost
+  gather_facts: yes
+  
+  tasks:
+    - name: download remote install script
+      ansible.builtin.get_url:
+        url: https://storage.googleapis.com/minikube/releases/latest/minikube-latest.x86_64.rpm
+        dest: "{{ ansible_env.HOME }}"
+    - name: execute shell exe
+      become: yes
+      ansible.builtin.shell:
+        cmd: rpm -Uvh "{{ ansible_env.HOME }}/minikube-latest.x86_64.rpm"
