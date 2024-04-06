@@ -1,0 +1,20 @@
+- name: Local install of Android Studio on Fedoraa
+  hosts: localhost
+  gather_facts: yes
+
+  tasks: 
+    - name: Installation of required libraries for 64-bit machines on fedora
+      become: yes
+      ansible.builtin.dnf:
+        name: 
+         - zlib.i686
+         - ncurses-libs.i686
+         - bzip2-libs.i686
+        state: present
+        update_cache: yes
+    
+    - name: Download latest version of Android Studio
+      ansible.builtin.unarchive:
+        remote_src: yes
+        src: "https://developer.android.com/studio"
+        dest: "/usr/local/"
