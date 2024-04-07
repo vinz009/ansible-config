@@ -1,14 +1,28 @@
-- name: local clojure installation
+- name: local clojure installation on fedora
   hosts: localhost
   gather_facts: yes
+  vars:
+    dependencies:
+      - curl
+      - curl
+      - rlwrap
+      - java-latest-openjdk
   
   tasks:
-    - name: download remote install script
+    - name: Check and Install pre-requisites
+      become: yes
+      ansible.builtin.dnf:
+        name: "{{ dependencies }}"
+        state: present
+        update_cache: yes
+
+    - name: download linux script installer
       ansible.builtin.get_url:
         url: https://github.com/clojure/brew-install/releases/latest/download/linux-install.sh
-        dest: "{{ ansible_env.HOME }}"
+        dest: "{{ ansible_env.HOME }}/Downloads"
         mode: '0755'
+
     - name: execute script
       become: yes
       ansible.builtin.script:
-        cmd: "{{ ansible_env.HOME }}/linux-install.sh"
+        cmd: "{{ ansible_env.HOME }}/Downloads/linux-install.sh"
