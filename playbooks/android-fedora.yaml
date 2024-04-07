@@ -1,3 +1,4 @@
+---
 - name: Local install of Android Studio on Fedoraa
   hosts: localhost
   gather_facts: yes
@@ -7,9 +8,9 @@
       become: yes
       ansible.builtin.dnf:
         name: 
-         - zlib.i686
-         - ncurses-libs.i686
-         - bzip2-libs.i686
+          - zlib.i686
+          - ncurses-libs.i686
+          - bzip2-libs.i686
         state: present
         update_cache: yes
     

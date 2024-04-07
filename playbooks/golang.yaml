@@ -1,0 +1,39 @@
+- name: Local install of golang
+  hosts: localhost
+  gather_facts: yes
+  vars:
+    go_version: 1.22.2
+
+  tasks:
+    - name: Print go version
+      ansible.builtin.debug: 
+        var: go_version
+
+    - name: Download source code with checksum (sha256)
+      ansible.builtin.get_url:
+        url: https://go.dev/dl/go{{ go_version }}.linux-amd64.tar.gz
+        dest: "{{ ansible_env.HOME }}/Downloads"
+        checksum: sha256:5901c52b7a78002aeff14a21f93e0f064f74ce1360fce51c6ee68cd471216a17
+
+    - name: Remove old golang install
+      become: yes
+      ansible.builtin.shell:
+        cmd: "rm -rf /usr/local/go && tar -C /usr/local -xzf go{{ go_version }}.linux-amd64.tar.gz"
+        chdir: "{{ ansible_env.HOME }}/Downloads"
+
+    - name: Ensure export path environment variable is present
+      ansible.builtin.lineinfile:
+        state: present
+        path: "{{ ansible_env.HOME }}/.bashrc.d/path.bashrc"
+        line: export PATH=$PATH:/usr/local/go/bin
+
+    - name: Source environment variable
+      ansible.builtin.shell: source "{{ ansible_env.HOME }}/.bashrc.d/path.bashrc"
+      args:
+        executable: /bin/bash
+
+    - name: Check go command
+      ansible.builtin.command:
+        cmd: go version
+      
+      
