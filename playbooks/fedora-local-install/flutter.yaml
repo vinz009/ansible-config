@@ -1,21 +1,24 @@
 - name: Manage a local linux flutter installation
   hosts: localhost
   gather_facts: yes
+  vars:
+    fedora_packages:
+      - bash
+      - curl
+      - file
+      - git
+      - unzip
+      - which
+      - xz
+      - zip
+      - mesa-libGLU
+    flutter_version: 3.19.5
 
   tasks:
     - name: Command line tools pre-requisites
       become: yes
       ansible.builtin.dnf:
-        name: 
-          - bash
-          - curl
-          - file
-          - git
-          - unzip
-          - which
-          - xz
-          - zip
-          - mesa-libGLU
+        name: "{{ fedora_packages }}"
         state: present
         update_cache: yes
 
@@ -28,7 +31,7 @@
     - name: Download source code
       ansible.builtin.unarchive:
         remote_src: yes
-        src: "https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.13.6-stable.tar.xz"
+        src: "https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_{{ flutter_version }}-stable.tar.xz"
         dest: "{{ ansible_env.HOME }}/development/"
 
     - name: Verify flutter install
