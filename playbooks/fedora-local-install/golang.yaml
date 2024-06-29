@@ -28,7 +28,7 @@
         line: export PATH=$PATH:/usr/local/go/bin
 
     - name: Source environment variable
-      ansible.builtin.shell: source "{{ ansible_env.HOME }}/.bashrc.d/path.bashrc"
+      ansible.builtin.shell: source "{{ ansible_env.HOME }}/.bashrc"
       args:
         executable: /bin/bash
 
