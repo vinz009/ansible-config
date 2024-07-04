@@ -1,5 +1,5 @@
 ---
-- name: local minikube RPM package installation
+- name: local minikube RPM package installation x86-64 Stable branch
   hosts: localhost
   gather_facts: yes
   
@@ -12,3 +12,10 @@
       become: yes
       ansible.builtin.shell:
         cmd: rpm -Uvh "{{ ansible_env.HOME }}/minikube-latest.x86_64.rpm"
+      register: rpm_contents
+      ignore_errors: true
+    - debug: var=rpm_contents
+    - name: download fedora virtualization
+      become: yes
+      ansible.builtin.dnf:
+        name: "@virtualization"

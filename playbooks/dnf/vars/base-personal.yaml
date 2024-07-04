@@ -4,9 +4,6 @@ generic:
 - zathura
 - firefox
 - cpu-x
-- podman
-- python3
-- rbenv
 - vim-enhanced
 - chromium-browser
 - qutebrowser

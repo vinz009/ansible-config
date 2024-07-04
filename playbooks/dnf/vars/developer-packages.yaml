@@ -1,0 +1,6 @@
+---
+developer:
+- buildah
+- podman
+- python3
+- rbenv
