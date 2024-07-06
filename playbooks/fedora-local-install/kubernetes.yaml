@@ -1,0 +1,14 @@
+---
+- name: Kubernetes kubectl Installation
+  hosts: localhost
+
+  tasks:
+    - name: Get latest kubectl version
+      ansible.builtin.uri:
+        url: https://dl.k8s.io/release/stable.txt
+        return_content: true
+      register: version
+
+    - debug:
+        var: version.content
+
