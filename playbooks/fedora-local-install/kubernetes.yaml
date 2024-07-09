@@ -7,8 +7,50 @@
       ansible.builtin.uri:
         url: https://dl.k8s.io/release/stable.txt
         return_content: true
-      register: version
+      register: kubectl_version
+
+    
+    - name: Download latest kubectl
+      ansible.builtin.uri:
+        url: "https://dl.k8s.io/release/{{ kubectl_version.content }}/bin/linux/amd64/kubectl"
+        dest: "{{ ansible_env.HOME }}"
+      register: kubectl
+
+    - name: Download kubectl checksum file
+      ansible.builtin.uri:
+        url: "https://dl.k8s.io/release/{{ kubectl_version.content }}/bin/linux/amd64/kubectl.sha256"
+        dest: "{{ ansible_env.HOME }}"
+    
+    - name: Validate kubectl with checksum
+      ansible.builtin.shell:
+        cmd: echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
+        chdir: "{{ ansible_env.HOME }}"
+      register: checksum_result
 
     - debug:
-        var: version.content
+        var: checksum_result
 
+    - name: Check if kubectl is OK
+      vars:
+        expected: "kubectl: OK"
+      ansible.builtin.assert:
+        that:
+          - checksum_result.stdout == expected
+        fail_msg: "kubectl is not legit"
+        success_msg: "kubectl is legit"
+
+    - name: Move and install kubectl
+      become: yes
+      ansible.builtin.file:
+        src: "{{ kubectl.path }}"
+        dest: /usr/local/bin/kubectl
+        state: link
+        owner: root
+        group: root
+        mode: "+x"
+
+    - name: Check if kubectl is installed
+      ansible.builtin.shell:
+        cmd: kubectl version --client --output=yaml
+      register: client
+      failed_when: client.rc > 1 
