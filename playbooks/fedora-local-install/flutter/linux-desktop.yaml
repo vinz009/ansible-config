@@ -1,0 +1,13 @@
+- name: Install flutter package for Linux Desktop
+  become: true
+  vars:
+    package:
+    - clang
+    - cmake
+    - ninja-build
+    - pkgconf
+    - gtk3-devel
+  ansible.builtin.dnf:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ package }}"

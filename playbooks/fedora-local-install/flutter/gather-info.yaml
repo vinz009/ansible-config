@@ -1,0 +1,6 @@
+- name: Gather system info
+  ansible.builtin.debug:
+    msg: 
+    - "CPU cores: {{ ansible_facts['processor_cores'] }}"
+    - "Memory in GB: {{ ansible_facts['memtotal_mb'] * 0.001 }}"
+    - "Diskspace total in GB: {{  ansible_facts['devices']['sda']['size'] }}"
