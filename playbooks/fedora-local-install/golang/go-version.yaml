@@ -1,0 +1,13 @@
+- name: Download latest go version
+  ansible.builtin.uri:
+    url: https://go.dev/dl/?mode=json
+    return_content: true
+  register: response_url
+
+- name: Extract go version from json output
+  ansible.builtin.set_fact:
+    go_latest_stable_version: "{{ response_url.json[0].files[1].version.lstrip('go') }}"
+
+- name: Verify version
+  ansible.builtin.debug:
+    var: go_latest_stable_version
