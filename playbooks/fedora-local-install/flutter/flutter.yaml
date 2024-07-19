@@ -1,4 +1,4 @@
-- name: test
+- name: Flutter local install
   hosts: localhost
   gather_facts: yes
 
@@ -49,3 +49,43 @@
         apply:
           tags: desktop
       tags: always
+
+    - name: Include flutter stable latest version
+      ansible.builtin.include_vars:
+        file: flutter-version.yaml
+        name: flutter_version
+        
+    - debug:
+        var: flutter_version
+
+    - debug:
+        var: "{{ ansible_env.HOME}}/Downloads"
+      tags: test
+
+    - name: Consider /usr/bin exist to put the binary
+      ansible.builtin.stat:
+        path: /usr/bin
+      register: p
+
+    - name: Check if path exist
+      ansible.builtin.debug:
+        msg: "Path {{ p }} exist and a directory"
+      when: p.stat.isdir is defined and p.stat.isdir
+
+    - name: Extract SDK
+      become: yes
+      ansible.builtin.unarchive:
+        remote_src: yes
+        src: "https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_{{ flutter_version.version }}-stable.tar.xz"
+        dest: /usr/bin
+
+    - name: Ensure flutter path exist on PATH environment
+      ansible.builtin.lineinfile:
+        state: present
+        path: "{{ ansible_env.HOME }}/.bashrc.d/path.bashrc"
+        line: export PATH=/usr/bin/flutter/bin:$PATH
+
+    - name: Source environment variable
+      ansible.builtin.shell: source "{{ ansible_env.HOME }}/.bashrc" && flutter --version
+      args:
+        executable: /bin/bash
