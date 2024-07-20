@@ -1,8 +1,9 @@
 ---
-- name: Local install of Android Studio on Fedoraa
+- name: Local install of Android Studio on Fedora
   hosts: localhost
   gather_facts: yes
   vars:
+    android_path: "{{ ansible_env.HOME }}/Android/Sdk/cmdline-tools"
     fedora_packages:
       - zlib-ng.i686
       - ncurses-libs.i686
@@ -20,9 +21,9 @@
         state: present
         update_cache: yes
 
-    - name: Creadte directory
+    - name: Create directory
       ansible.builtin.file:
-        path: "{{ ansible_env.HOME }}/Android/Sdk"
+        path: "{{ android_path }}"
         state: directory
         mode: '0755'
 
@@ -40,7 +41,7 @@
       ansible.builtin.unarchive:
         remote_src: yes
         src: https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
-        dest: "{{ ansible_env.HOME }}/Android/Sdk"
+        dest: "{{ android_path }}"
 
     - name: Source environment variable
       ansible.builtin.shell: source "{{ ansible_env.HOME }}/.bashrc"
