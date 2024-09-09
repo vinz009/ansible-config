@@ -1,5 +1,0 @@
----
-clojure:
-- java-openjdk
-- curl
-- rlwrap
