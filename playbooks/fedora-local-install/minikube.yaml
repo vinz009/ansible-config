@@ -1,34 +1,20 @@
 ---
-- name: local minikube RPM package installation x86-64 Stable branch
+- name: Local minikube RPM package installation x86-64 Stable branch
   hosts: localhost
-  gather_facts: yes
-  
-  tasks:
+  gather_facts: true
 
+  tasks:
     - name: Set environment variable
       ansible.builtin.lineinfile:
         state: present
         path: "{{ ansible_env.HOME }}/.bashrc.d/env.bashrc"
         line: export MINIKUBE_HOME=$XDG_CONFIG_HOME/minikube
-    - name: Source environment variable
-      ansible.builtin.shell: source "{{ ansible_env.HOME }}/.bashrc"
-      args:
-        executable: /bin/bash
 
-    - name: download remote install script
+    - name: Download remote install script
       ansible.builtin.get_url:
         url: https://storage.googleapis.com/minikube/releases/latest/minikube-latest.x86_64.rpm
         dest: "{{ ansible_env.HOME }}"
 
-    - name: execute shell exe
-      become: yes
-      ansible.builtin.shell:
-        cmd: rpm -Uvh "{{ ansible_env.HOME }}/minikube-latest.x86_64.rpm"
-      register: rpm_contents
-      ignore_errors: true
-    - debug: var=rpm_contents
-
-    - name: download fedora virtualization
-      become: yes
+    - name: Download fedora virtualization
       ansible.builtin.dnf:
         name: "@virtualization"
