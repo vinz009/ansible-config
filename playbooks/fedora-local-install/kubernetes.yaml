@@ -11,14 +11,18 @@
 
     - name: Download latest kubectl
       ansible.builtin.uri:
-        url: "https://dl.k8s.io/release/{{ kubectl_version.content }}/bin/linux/amd64/kubectl"
+        url: >
+          https://dl.k8s.io/release/{{ kubectl_version.content }}
+          /bin/linux/amd64/kubectl
         dest: "{{ ansible_env.HOME }}"
       register: kubectl
 
     - name: Download kubectl checksum file
       ansible.builtin.uri:
-        url: "https://dl.k8s.io/release/{{ kubectl_version.content }}/bin/linux/amd64/kubectl.sha256"
-        dest: "{{ ansible_env.HOME }}"
+        url: >
+          https://dl.k8s.io/release/{{ kubectl_version.content }}
+          /bin/linux/amd64/kubectl.sha256
+        dest: "{{ ansible_env.HOME }}
 
     - name: Validate kubectl with checksum
       ansible.builtin.shell:

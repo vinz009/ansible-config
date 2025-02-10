@@ -1,22 +1,9 @@
 ---
-# defaults file for fedora-dev-env
 base:
   - dmenu
   - i3
   - i3status
   - git
-
-misc:
-  - cpu-x
-  - lynx
-  - redshift
-  - zathura
-  - zathura-plugins-all
-
-browser:
-  - firefox
-  - qutebrowser
-  - chromium-browser
 
 terminal-emulator:
   - alacritty
@@ -25,7 +12,21 @@ terminal-emulator:
 text-editor:
   - vim-enhanced
   - neovim
-  - emacs-gtk+11
+  - emacs-gtk+x11
+
+browser:
+  - firefox
+  - qutebrowser
+  - chromium-browser
+
+cli-program:
+  - cpu-x
+  - lynx
+  - redshift
+
+lightweight-GUI:
+  - zathura
+  - zathura-plugins-all
 
 IDE:
   - geany
@@ -38,16 +39,10 @@ GUI:
   - clementine
   - thunar
 
-# rust,ruby
 language:
   - rustup
   - ruby
   - rbenv
-
-clojure:
-  - java-openjdk
-  - curl
-  - rlwrap
 
 devops:
   - buildah
