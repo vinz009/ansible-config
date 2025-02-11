@@ -1,28 +1,59 @@
-- name: local clojure installation on fedora
+---
+- name: Local clojure installation on Fedora Linux
   hosts: localhost
   gather_facts: true
   vars:
     dependencies:
+      - bash
       - curl
-      - curl
-      - rlwrap
       - java-latest-openjdk
+      - rlwrap
 
   tasks:
-    - name: Check and Install pre-requisites
+    - name: Check pre-requisites dependencies
       become: true
       ansible.builtin.dnf:
         name: "{{ dependencies }}"
         state: present
         update_cache: true
 
-    - name: download linux script installer
+    - name: Download linux script installer
       ansible.builtin.get_url:
-        url: https://github.com/clojure/brew-install/releases/latest/download/linux-install.sh
+        url: "https://github.com/clojure/brew-install/\
+          releases/latest/download/linux-install.sh"
         dest: "{{ ansible_env.HOME }}/Downloads"
         mode: "0755"
 
-    - name: execute script
+    - name: Create custom directory on /opt if it does not exist
+      become: true
+      ansible.builtin.file:
+        path: /opt/infrastructure/clojure
+        state: directory
+        mode: '0755'
+
+    - name: Execute script
       become: true
       ansible.builtin.script:
-        cmd: "{{ ansible_env.HOME }}/Downloads/linux-install.sh"
+        cmd: >
+          {{ ansible_env.HOME }}/Downloads/linux-install.sh
+          --prefix /opt/infrastructure/clojure
+
+    - name: Extend the MANPATH to include on manual pages
+      become: true
+      ansible.builtin.lineinfile:
+        path: /etc/man_db.conf
+        line: >
+          MANPATH_MAP /opt/infrastructure/clojure/bin
+          /opt/infrastructure/clojure/man
+
+    - name: Ensure ansible bash environment config exist
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/.bashrc.d/\
+          ansible-path-executable.bashrc"
+        state: touch
+
+    - name: Ensure clojure optional directory is on PATH environment
+      ansible.builtin.lineinfile:
+        path: "{{ ansible_env.HOME }}/.bashrc.d/\
+          ansible-path-executable.bashrc"
+        line: export PATH="/opt/infrastructure/clojure/bin:$PATH" 
