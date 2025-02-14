@@ -8,22 +8,22 @@
       - i3
       - i3status
       - git
-    terminal-emulator:
+    terminalEmulator:
       - alacritty
       - gnome-terminal
-    text-editor:
+    textEditor:
       - vim-enhanced
       - neovim
       - emacs-gtk+x11
     browser:
       - firefox
       - qutebrowser
-      - chromium-browser
-    cli-program:
+      - chromium
+    cliProgram:
       - cpu-x
       - lynx
       - redshift
-    lightweight-GUI:
+    lightweightGUI:
       - zathura
       - zathura-plugins-all
     IDE:
@@ -43,7 +43,7 @@
       - buildah
       - podman
       - python3
-    python-based:
+    pythonBased:
       - ansible
       - yamllint
 
@@ -55,13 +55,13 @@
         state: present
       loop:
         - "{{ base }}"
-        - "{{ misc }}"
+        - "{{ textEditor }}"
+        - "{{ terminalEmulator }}"
         - "{{ browser }}"
-        - "{{ text-editor }}"
-        - "{{ terminal-emulator }}"
+        - "{{ cliProgram }}"
+        - "{{ lightweightGUI }}"
         - "{{ IDE }}"
         - "{{ GUI }}"
         - "{{ language }}"
         - "{{ devops }}"
-        - "{{ python-based }}"
-        - "{{ generic }}"
+        - "{{ pythonBased }}"

@@ -1,0 +1,20 @@
+---
+- name: Install Node Version Manager
+  hosts: localhost
+  gather_facts: yes
+
+  tasks:
+    - name: Create temporary empty directory
+      ansible.builtin.file:
+        path: "{{ ansible_env.XDG_DATA_HOME }}/nvm"
+        state: directory
+        mode: '0755'
+
+    - name: Install nvm via git
+      ansible.builtin.git:
+        repo: 'https://github.com/nvm-sh/nvm.git'
+        dest: "{{ ansible_env.XDG_DATA_HOME }}/nvm"
+        version: v0.40.1
+
+    - name: Source nvm script
+      ansible.builtin.shell: source "{{ ansible_env.NVM_DIR }}/nvm.sh"

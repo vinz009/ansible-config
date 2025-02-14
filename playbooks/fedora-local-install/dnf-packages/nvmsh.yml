@@ -1,0 +1,29 @@
+---
+- name: Install Node Version Manager
+  hosts: localhost
+  gather_facts: yes
+  tasks:
+    - name: Ensure ansible bash environment exists
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/.bashrc.d/\
+          ansible-env.bashrc"
+      register: ansible_env_bashrc
+
+    - name: Ensure ansible env bashrc exist
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/.bashrc.d/\
+          ansible-env.bashrc"
+        state: touch
+      when: not ansible_env_bashrc.stat.exists
+
+    - name: Put lines in bashrc from nvmsh
+      ansible.builtin.lineinfile:
+        path: "{{ ansible_env.HOME }}/.bashrc.d/\
+          ansible-env.bashrc"
+        line: export NVM_DIR="$XDG_DATA_HOME/nvm"
+
+    - name: Source ansible env bashrc
+      ansible.builtin.shell: source "{{ ansible_env.HOME }}/.bashrc"
+      args:
+        executable: /bin/bash
+
