@@ -1,6 +1,34 @@
 ---
-- name: Test
-  hosts: localhost 
+- name: Local clojure installation on Fedora Linux
+  hosts: localhost
+  gather_facts: true
 
   tasks:
-    
+    - name: Clojure exist in package dnf
+      ansible.builtin.package_facts:
+        manager: "dnf"
+
+    - name: Print result of prev task
+      ansible.builtin.debug:
+        var: ansible_facts.packages.clojure
+
+   # - name: Execute script
+   #   become: true
+   #   ansible.builtin.script:
+   #     cmd: >
+   #       {{ ansible_env.HOME }}/Downloads/linux-install.sh
+   #       --prefix /opt/infrastructure/clojure
+   #   when: not "'clojure' in packages_dnf"
+
+#    - name: Print result of prev task
+#      ansible.builtin.debug:
+#        var: st
+
+#
+#    - name: Ensure clojure optional directory is on PATH environment
+#      ansible.builtin.lineinfile:
+#        path: "{{ ansible_env.HOME }}/.bashrc.d/\
+#          ansible-path-executable.bashrc"
+#        line: export PATH="/opt/infrastructure/clojure/bin:$PATH" 
+
+

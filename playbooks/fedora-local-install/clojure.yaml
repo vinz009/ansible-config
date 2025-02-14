@@ -17,12 +17,18 @@
         state: present
         update_cache: true
 
+    - name: Check if installer script exist locally
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/Downloads/linux-install.sh"
+      register: clojure_installer_script
+
     - name: Download linux script installer
       ansible.builtin.get_url:
         url: "https://github.com/clojure/brew-install/\
           releases/latest/download/linux-install.sh"
         dest: "{{ ansible_env.HOME }}/Downloads"
         mode: "0755"
+      when: not clojure_installer_script.stat.exists
 
     - name: Create custom directory on /opt if it does not exist
       become: true
@@ -31,12 +37,18 @@
         state: directory
         mode: '0755'
 
+    - name: Clojure exist in package dnf
+      ansible.builtin.package_facts:
+        manager: "dnf"
+      register: packages_dnf
+
     - name: Execute script
       become: true
       ansible.builtin.script:
         cmd: >
           {{ ansible_env.HOME }}/Downloads/linux-install.sh
           --prefix /opt/infrastructure/clojure
+      when: "'clojure' in packages_dnf"
 
     - name: Extend the MANPATH to include on manual pages
       become: true
@@ -47,10 +59,17 @@
           /opt/infrastructure/clojure/man
 
     - name: Ensure ansible bash environment config exist
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/.bashrc.d/\
+          ansible-path-executable.bashrc"
+      register: ansible_bashrc
+
+    - name: Ensure ansible bash environment config exist
       ansible.builtin.file:
         path: "{{ ansible_env.HOME }}/.bashrc.d/\
           ansible-path-executable.bashrc"
         state: touch
+      when: not ansible_bashrc.stat.exists
 
     - name: Ensure clojure optional directory is on PATH environment
       ansible.builtin.lineinfile:
