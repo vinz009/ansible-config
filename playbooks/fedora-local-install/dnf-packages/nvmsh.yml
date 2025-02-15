@@ -27,3 +27,25 @@
       args:
         executable: /bin/bash
 
+    - name: Ensure ansible nvmsh exist
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/.bashrc.d/\
+          ansible-nvmsh.bashrc"
+      register: nvmsh_bashrc
+
+    - name: Ensure ansible nvmsh bashrc exist
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/.bashrc.d/\
+          ansible-nvmsh.bashrc"
+        state: touch
+      when: not nvmsh_bashrc.stat.exists
+
+    - name: Put lines in nvmsh bashrc
+      ansible.builtin.lineinfile:
+        path: "{{ ansible_env.HOME }}/.bashrc.d/\
+          ansible-nvmsh.bashrc"
+        line: >
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm\
+            [ -s "NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"\
+            # This loads nvm bash_completion
+
