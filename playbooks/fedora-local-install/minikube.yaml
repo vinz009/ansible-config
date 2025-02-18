@@ -4,17 +4,36 @@
   gather_facts: true
 
   tasks:
+    - name: Ensure ansible bash environment exist
+      ansible.builtin.stat:
+	path: "{{ ansible_env.HOME }}/.bashrc.d/\
+	  ansible-env.bashrc"
+      register: ansible_env_bashrc
+
+    - name: Ensure ansible env bashrc exist
+      ansible.builtin.file:
+	path: "{{ ansible_env.HOME }}/.bashrc.d/\
+	  ansible-env.bashrc"
+	state: touch
+      when: not ansible_env_bashrc.stat.exists
+
     - name: Set environment variable
       ansible.builtin.lineinfile:
         state: present
-        path: "{{ ansible_env.HOME }}/.bashrc.d/env.bashrc"
-        line: export MINIKUBE_HOME=$XDG_CONFIG_HOME/minikube
+        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-env.bashrc"
+        line: export MINIKUBE_HOME=/opt/minikube
+
+    - name: Check if rpm installer already exist
+      ansible.builtin.stat:
+	path: "{{ ansible_env.HOME }}/Downloads/minikube-latest.x86_64.rpm"
+      register: minikube_rpm
 
     - name: Download remote install script
       ansible.builtin.get_url:
         url: https://storage.googleapis.com/minikube/releases/latest/minikube-latest.x86_64.rpm
-        dest: "{{ ansible_env.HOME }}"
+        dest: "{{ ansible_env.HOME }}/Downloads"
+      when: not minikube_rpm.stat.exists
 
-    - name: Download fedora virtualization
-      ansible.builtin.dnf:
-        name: "@virtualization"
+    - name: Install rpm package with user privileged
+      ansible.builtin.script:
+	cmd: rpm -Uvh "{{ ansible_env.HOME }}/Downloads/minikube-latest.x86_64.rpm"
