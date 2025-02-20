@@ -3,13 +3,13 @@
   hosts: localhost
   gather_facts: yes
   tasks:
-    - name: Ensure ansible bash environment exists
+    - name: Check ansible bashrc file exist
       ansible.builtin.stat:
         path: "{{ ansible_env.HOME }}/.bashrc.d/\
           ansible-env.bashrc"
       register: ansible_env_bashrc
 
-    - name: Ensure ansible env bashrc exist
+    - name: Create ansible env bashrc if not exist
       ansible.builtin.file:
         path: "{{ ansible_env.HOME }}/.bashrc.d/\
           ansible-env.bashrc"
@@ -47,3 +47,18 @@
         line: |
           [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
           [ -s "NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+    - name: Create temporary empty directory
+      ansible.builtin.file:
+        path: "{{ ansible_env.XDG_DATA_HOME }}/nvm"
+        state: directory
+        mode: '0755'
+
+    - name: Install nvm via git
+      ansible.builtin.git:
+        repo: 'https://github.com/nvm-sh/nvm.git'
+        dest: "{{ ansible_env.XDG_DATA_HOME }}/nvm"
+        version: v0.40.1
+
+    - name: Source nvm script
+      ansible.builtin.shell: source "{{ ansible_env.NVM_DIR }}/nvm.sh"
