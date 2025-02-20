@@ -6,15 +6,15 @@
   tasks:
     - name: Ensure ansible bash environment exist
       ansible.builtin.stat:
-	path: "{{ ansible_env.HOME }}/.bashrc.d/\
-	  ansible-env.bashrc"
+        path: "{{ ansible_env.HOME }}/.bashrc.d/\
+          ansible-env.bashrc"
       register: ansible_env_bashrc
 
     - name: Ensure ansible env bashrc exist
       ansible.builtin.file:
-	path: "{{ ansible_env.HOME }}/.bashrc.d/\
-	  ansible-env.bashrc"
-	state: touch
+        path: "{{ ansible_env.HOME }}/.bashrc.d/\
+          ansible-env.bashrc"
+        state: touch
       when: not ansible_env_bashrc.stat.exists
 
     - name: Set environment variable
@@ -25,7 +25,7 @@
 
     - name: Check if rpm installer already exist
       ansible.builtin.stat:
-	path: "{{ ansible_env.HOME }}/Downloads/minikube-latest.x86_64.rpm"
+        path: "{{ ansible_env.HOME }}/Downloads/minikube-latest.x86_64.rpm"
       register: minikube_rpm
 
     - name: Download remote install script
@@ -35,5 +35,6 @@
       when: not minikube_rpm.stat.exists
 
     - name: Install rpm package with user privileged
+      become: true
       ansible.builtin.script:
-	cmd: rpm -Uvh "{{ ansible_env.HOME }}/Downloads/minikube-latest.x86_64.rpm"
+        cmd: /usr/bin/rpm -Uvh "{{ ansible_env.HOME }}/Downloads/minikube-latest.x86_64.rpm"

@@ -43,9 +43,6 @@
       - buildah
       - podman
       - python3
-    pythonBased:
-      - ansible
-      - yamllint
 
   tasks:
     - name: Fedora Package
@@ -64,4 +61,4 @@
         - "{{ GUI }}"
         - "{{ language }}"
         - "{{ devops }}"
-        - "{{ pythonBased }}"
+        - "{{ groups }}"
