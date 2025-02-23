@@ -4,24 +4,20 @@
   gather_facts: true
 
   tasks:
-    - name: Ensure ansible bash environment exist
-      ansible.builtin.stat:
-        path: "{{ ansible_env.HOME }}/.bashrc.d/\
-          ansible-env.bashrc"
-      register: ansible_env_bashrc
-
-    - name: Ensure ansible env bashrc exist
-      ansible.builtin.file:
-        path: "{{ ansible_env.HOME }}/.bashrc.d/\
-          ansible-env.bashrc"
-        state: touch
-      when: not ansible_env_bashrc.stat.exists
+    - import_tasks: ansible_path.yml
 
     - name: Set environment variable
       ansible.builtin.lineinfile:
         state: present
-        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-env.bashrc"
-        line: export MINIKUBE_HOME=/opt/minikube
+        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-path.bashrc"
+        line: "export MINIKUBE_HOME={{ ansible_env.HOME }}/opt/minikube"
+
+    - name: Create minikube directory in /opt
+      become: true
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/opt/minikube"
+        state: directory
+        mode: '0755'
 
     - name: Check if rpm installer already exist
       ansible.builtin.stat:

@@ -58,18 +58,7 @@
           MANPATH_MAP /opt/infrastructure/clojure/bin
           /opt/infrastructure/clojure/man
 
-    - name: Ensure ansible bash environment config exist
-      ansible.builtin.stat:
-        path: "{{ ansible_env.HOME }}/.bashrc.d/\
-          ansible-path-executable.bashrc"
-      register: ansible_bashrc
-
-    - name: Ensure ansible bash environment config exist
-      ansible.builtin.file:
-        path: "{{ ansible_env.HOME }}/.bashrc.d/\
-          ansible-path-executable.bashrc"
-        state: touch
-      when: not ansible_bashrc.stat.exists
+    - import_tasks: shared/ansible_path_executable.yml
 
     - name: Ensure clojure optional directory is on PATH environment
       ansible.builtin.lineinfile:

@@ -3,23 +3,11 @@
   hosts: localhost
   gather_facts: yes
   tasks:
-    - name: Check ansible bashrc file exist
-      ansible.builtin.stat:
-        path: "{{ ansible_env.HOME }}/.bashrc.d/\
-          ansible-env.bashrc"
-      register: ansible_env_bashrc
-
-    - name: Create ansible env bashrc if not exist
-      ansible.builtin.file:
-        path: "{{ ansible_env.HOME }}/.bashrc.d/\
-          ansible-env.bashrc"
-        state: touch
-      when: not ansible_env_bashrc.stat.exists
+    - import_tasks: shared/ansible_path.yml
 
     - name: Put lines in bashrc from nvmsh
       ansible.builtin.lineinfile:
-        path: "{{ ansible_env.HOME }}/.bashrc.d/\
-          ansible-env.bashrc"
+        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-path.bashrc"
         line: export NVM_DIR="$XDG_DATA_HOME/nvm"
 
     - name: Source ansible env bashrc
@@ -27,23 +15,11 @@
       args:
         executable: /bin/bash
 
-    - name: Ensure ansible nvmsh exist
-      ansible.builtin.stat:
-        path: "{{ ansible_env.HOME }}/.bashrc.d/\
-          ansible-nvmsh.bashrc"
-      register: nvmsh_bashrc
-
-    - name: Ensure ansible nvmsh bashrc exist
-      ansible.builtin.file:
-        path: "{{ ansible_env.HOME }}/.bashrc.d/\
-          ansible-nvmsh.bashrc"
-        state: touch
-      when: not nvmsh_bashrc.stat.exists
+    - import_tasks: shared/ansible_option.yml
 
     - name: Put lines in nvmsh bashrc
       ansible.builtin.lineinfile:
-        path: "{{ ansible_env.HOME }}/.bashrc.d/\
-          ansible-nvmsh.bashrc"
+        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-option.bashrc"
         line: |
           [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
           [ -s "NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
