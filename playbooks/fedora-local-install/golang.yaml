@@ -3,16 +3,19 @@
   gather_facts: yes
 
   tasks:
-    - name: Print go version
-      ansible.builtin.debug: 
-        var: go_version
+    - name: Download latest go version
+      ansible.builtin.uri:
+        url: https://go.dev/dl/?mode=json
+        return_content: true
+      register: response_url
 
-    - name: Download latest stable version
-      ansible.builtin.include_tasks:
-        file: go-version.yaml
-        apply:
-          tags: go_version_download
-        tags: always
+    - name: Extract go version from json output
+      ansible.builtin.set_fact:
+        go_latest_stable_version: "{{ response_url.json[0].files[1].version.lstrip('go') }}"
+
+    - name: Verify version
+      ansible.builtin.debug:
+        var: go_latest_stable_version
 
     - name: Download source code with checksum (sha256)
       ansible.builtin.get_url:
@@ -22,13 +25,13 @@
     - name: Remove old golang install
       become: yes
       ansible.builtin.shell:
-        cmd: "rm -rf /usr/local/go && tar -C /usr/local -xzf go{{ go_version }}.linux-amd64.tar.gz"
+        cmd: "rm -rf /usr/local/go && tar -C /usr/local -xzf go{{ go_latest_stable_version }}.linux-amd64.tar.gz"
         chdir: "{{ ansible_env.HOME }}/Downloads"
 
     - name: Ensure export path environment variable is present
       ansible.builtin.lineinfile:
         state: present
-        path: "{{ ansible_env.HOME }}/.bashrc.d/path.bashrc"
+        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-path-executable.bashrc"
         line: export PATH=$PATH:/usr/local/go/bin
 
     - name: Source environment variable
@@ -39,5 +42,3 @@
     - name: Check go command
       ansible.builtin.command:
         cmd: go version
-      
-      
