@@ -20,13 +20,13 @@
     - name: Download source code with checksum (sha256)
       ansible.builtin.get_url:
         url: https://go.dev/dl/go{{ go_latest_stable_version }}.linux-amd64.tar.gz
-        dest: "{{ ansible_env.HOME }}/Downloads"
+        dest: "{{ ansible_env.HOME }}/Downloads/ansible"
 
     - name: Remove old golang install
       become: yes
       ansible.builtin.shell:
         cmd: "rm -rf /usr/local/go && tar -C /usr/local -xzf go{{ go_latest_stable_version }}.linux-amd64.tar.gz"
-        chdir: "{{ ansible_env.HOME }}/Downloads"
+        chdir: "{{ ansible_env.HOME }}/Downloads/ansible"
 
     - name: Ensure export path environment variable is present
       ansible.builtin.lineinfile:

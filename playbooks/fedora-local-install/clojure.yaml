@@ -19,14 +19,14 @@
 
     - name: Check if installer script exist locally
       ansible.builtin.stat:
-        path: "{{ ansible_env.HOME }}/Downloads/linux-install.sh"
+        path: "{{ ansible_env.HOME }}/Downloads/ansible/linux-install.sh"
       register: clojure_installer_script
 
     - name: Download linux script installer
       ansible.builtin.get_url:
         url: "https://github.com/clojure/brew-install/\
           releases/latest/download/linux-install.sh"
-        dest: "{{ ansible_env.HOME }}/Downloads"
+        dest: "{{ ansible_env.HOME }}/Downloads/ansible/"
         mode: "0755"
       when: not clojure_installer_script.stat.exists
 
@@ -46,7 +46,7 @@
       become: true
       ansible.builtin.script:
         cmd: >
-          {{ ansible_env.HOME }}/Downloads/linux-install.sh
+          {{ ansible_env.HOME }}/Downloads/ansible/linux-install.sh
           --prefix /opt/infrastructure/clojure
       when: "'clojure' in packages_dnf"
 

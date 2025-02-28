@@ -1,0 +1,11 @@
+---
+- name: Create ansible download directory
+  hosts: localhost
+  gather_facts: true
+  
+  tasks:
+    - name: Create directory inside user download directory
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/Download/ansible"
+        state: directory
+        mode: '0755'

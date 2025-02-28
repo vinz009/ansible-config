@@ -21,16 +21,16 @@
 
     - name: Check if rpm installer already exist
       ansible.builtin.stat:
-        path: "{{ ansible_env.HOME }}/Downloads/minikube-latest.x86_64.rpm"
+        path: "{{ ansible_env.HOME }}/Downloads/ansible/minikube-latest.x86_64.rpm"
       register: minikube_rpm
 
     - name: Download remote install script
       ansible.builtin.get_url:
         url: https://storage.googleapis.com/minikube/releases/latest/minikube-latest.x86_64.rpm
-        dest: "{{ ansible_env.HOME }}/Downloads"
+        dest: "{{ ansible_env.HOME }}/Downloads/ansible"
       when: not minikube_rpm.stat.exists
 
     - name: Install rpm package with user privileged
       become: true
       ansible.builtin.script:
-        cmd: /usr/bin/rpm -Uvh "{{ ansible_env.HOME }}/Downloads/minikube-latest.x86_64.rpm"
+        cmd: /usr/bin/rpm -Uvh "{{ ansible_env.HOME }}/Downloads/ansible/minikube-latest.x86_64.rpm"
