@@ -1,0 +1,4 @@
+---
+# .ansible-lint.yml in root git directory locally
+
+offline: true
