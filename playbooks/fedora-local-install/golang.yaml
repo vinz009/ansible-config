@@ -27,18 +27,26 @@
           - "{{ go_latest_stable_version }}"
           - "{{ go_sha256 }}"
 
+    - name: Check if tarfile already exists
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/Downloads/ansible/{{ go_latest_stable_version }}.linux-amd64.tar.gz"
+      register: go_tar_file
+
     - name: Download source code with checksum (sha256)
       ansible.builtin.get_url:
         url: https://go.dev/dl/{{ go_latest_stable_version }}.linux-amd64.tar.gz
         dest: "{{ ansible_env.HOME }}/Downloads/ansible"
         checksum: "sha256:{{ go_sha256 }}"
         mode: '0644'
+      when: not go_tar_file.stat.exists
 
     - name: Remove old golang install
       become: true
       ansible.builtin.shell:
         cmd: "rm -rf /usr/local/go && tar -C /usr/local -xzf {{ go_latest_stable_version }}.linux-amd64.tar.gz"
         chdir: "{{ ansible_env.HOME }}/Downloads/ansible"
+      register: my_output
+      changed_when: my_output.rc != 0
 
     - name: Ensure export path environment variable is present
       ansible.builtin.lineinfile:
@@ -50,7 +58,11 @@
       ansible.builtin.shell: source "{{ ansible_env.HOME }}/.bashrc"
       args:
         executable: /bin/bash
+      register: my_output
+      changed_when: my_output.rc != 0
 
     - name: Check go command
       ansible.builtin.command:
         cmd: go version
+      register: my_output
+      changed_when: my_output.rc != 0
