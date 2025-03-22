@@ -1,17 +1,17 @@
 ---
 - name: Install Dnf Packages
   hosts: localhost
-  gather_facts: yes
+  gather_facts: true
   vars:
     base:
       - dmenu
       - i3
       - i3status
       - git
-    terminalEmulator:
+    terminalemulator:
       - alacritty
       - gnome-terminal
-    textEditor:
+    texteditor:
       - vim-enhanced
       - neovim
       - emacs-gtk+x11
@@ -19,20 +19,20 @@
       - firefox
       - qutebrowser
       - chromium
-    cliProgram:
+    cliprogram:
       - cpu-x
       - lynx
       - redshift
-    lightweightGUI:
+    lightweightgui:
       - zathura
       - zathura-plugins-all
-    IDE:
+    ide:
       - geany
       - geany-themes
       - geany-plugins-autoclose
       - geany-plugins-vimode
       - geany-plugins-treebrowser
-    GUI:
+    gui:
       - clementine
       - thunar
     language:
@@ -46,7 +46,7 @@
 
   tasks:
     - name: Fedora Package
-      become: yes
+      become: true
       ansible.builtin.dnf:
         name: "{{ item }}"
         state: present

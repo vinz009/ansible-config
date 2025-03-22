@@ -58,10 +58,12 @@
           MANPATH_MAP /opt/infrastructure/clojure/bin
           /opt/infrastructure/clojure/man
 
-    - import_tasks: shared/ansible_path_executable.yml
+    - name: Include path executable
+      ansible.builtin.import_tasks:
+        file: shared/ansible_path_executable.yml
 
     - name: Ensure clojure optional directory is on PATH environment
       ansible.builtin.lineinfile:
         path: "{{ ansible_env.HOME }}/.bashrc.d/\
           ansible-path-executable.bashrc"
-        line: export PATH="/opt/infrastructure/clojure/bin:$PATH" 
+        line: export PATH="/opt/infrastructure/clojure/bin:$PATH"

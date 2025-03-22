@@ -1,6 +1,6 @@
 - name: Local install of golang
   hosts: localhost
-  gather_facts: yes
+  gather_facts: true
 
   tasks:
     - name: Download latest go version
@@ -9,23 +9,35 @@
         return_content: true
       register: response_url
 
+    - name: Show the info of latest go version
+      ansible.builtin.debug:
+        var: response_url.json[0].version
+
     - name: Extract go version from json output
       ansible.builtin.set_fact:
-        go_latest_stable_version: "{{ response_url.json[0].files[1].version.lstrip('go') }}"
+        go_latest_stable_version: "{{ response_url.json[0].version }}"
+
+    - name: Extract go sha256 from linux amd64 installer
+      ansible.builtin.set_fact:
+        go_sha256: "{{ response_url.json[0].files[14].sha256 }}"
 
     - name: Verify version
       ansible.builtin.debug:
-        var: go_latest_stable_version
+        msg:
+          - "{{ go_latest_stable_version }}"
+          - "{{ go_sha256 }}"
 
     - name: Download source code with checksum (sha256)
       ansible.builtin.get_url:
-        url: https://go.dev/dl/go{{ go_latest_stable_version }}.linux-amd64.tar.gz
+        url: https://go.dev/dl/{{ go_latest_stable_version }}.linux-amd64.tar.gz
         dest: "{{ ansible_env.HOME }}/Downloads/ansible"
+        checksum: "sha256:{{ go_sha256 }}"
+        mode: '0644'
 
     - name: Remove old golang install
-      become: yes
+      become: true
       ansible.builtin.shell:
-        cmd: "rm -rf /usr/local/go && tar -C /usr/local -xzf go{{ go_latest_stable_version }}.linux-amd64.tar.gz"
+        cmd: "rm -rf /usr/local/go && tar -C /usr/local -xzf {{ go_latest_stable_version }}.linux-amd64.tar.gz"
         chdir: "{{ ansible_env.HOME }}/Downloads/ansible"
 
     - name: Ensure export path environment variable is present
