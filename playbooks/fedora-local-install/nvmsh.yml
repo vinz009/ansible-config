@@ -4,7 +4,7 @@
   gather_facts: true
   tasks:
     - name: Create if no bash env path found
-      import_tasks: 
+      ansible.builtin.import_tasks:
         file: ./shared/ansible_path.yml
 
     - name: Put lines in bashrc from nvmsh
@@ -16,8 +16,12 @@
       ansible.builtin.shell: source "{{ ansible_env.HOME }}/.bashrc"
       args:
         executable: /bin/bash
+      register: my_output
+      changed_when: my_output.rc != 0
 
-    - import_tasks: shared/ansible_option.yml
+    - name: Create bash env option if not found
+      ansible.builtin.import_tasks:
+        file: shared/ansible_option.yml
 
     - name: Put lines in nvmsh bashrc
       ansible.builtin.lineinfile:
@@ -39,4 +43,5 @@
         version: v0.40.1
 
     - name: Source nvm script
-      ansible.builtin.shell: source "{{ ansible_env.NVM_DIR }}/nvm.sh"
+      ansible.builtin.command: source "{{ ansible_env.NVM_DIR }}/nvm.sh }}"
+      changed_when: false
