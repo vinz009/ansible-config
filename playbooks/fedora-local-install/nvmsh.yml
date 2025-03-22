@@ -1,9 +1,11 @@
 ---
 - name: Install Node Version Manager
   hosts: localhost
-  gather_facts: yes
+  gather_facts: true
   tasks:
-    - import_tasks: shared/ansible_path.yml
+    - name: Create if no bash env path found
+      import_tasks: 
+        file: ./shared/ansible_path.yml
 
     - name: Put lines in bashrc from nvmsh
       ansible.builtin.lineinfile:

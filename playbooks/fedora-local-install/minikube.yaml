@@ -4,7 +4,9 @@
   gather_facts: true
 
   tasks:
-    - import_tasks: ansible_path.yml
+    - name: Create bash env if not found
+      ansible.builtin.import_tasks:
+        file: ./shared/ansible_path.yml
 
     - name: Set environment variable
       ansible.builtin.lineinfile:
@@ -28,6 +30,7 @@
       ansible.builtin.get_url:
         url: https://storage.googleapis.com/minikube/releases/latest/minikube-latest.x86_64.rpm
         dest: "{{ ansible_env.HOME }}/Downloads/ansible"
+        mode: '0644'
       when: not minikube_rpm.stat.exists
 
     - name: Install rpm package with user privileged

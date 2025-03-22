@@ -7,4 +7,5 @@
   ansible.builtin.file:
     path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-path.bashrc"
     state: touch
+    mode: '0644'
   when: not ansible_path.stat.exists

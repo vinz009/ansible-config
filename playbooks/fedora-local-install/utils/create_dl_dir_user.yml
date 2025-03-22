@@ -2,7 +2,7 @@
 - name: Create ansible download directory
   hosts: localhost
   gather_facts: true
-  
+
   tasks:
     - name: Create directory inside user download directory
       ansible.builtin.file:
