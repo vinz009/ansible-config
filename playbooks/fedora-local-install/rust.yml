@@ -1,0 +1,9 @@
+---
+- name: Rust Installer
+  hosts: localhost
+  gather_facts: true
+
+  tasks:
+    - name: Create rust independenly
+      ansible.builtin.shell:
+        cmd: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
