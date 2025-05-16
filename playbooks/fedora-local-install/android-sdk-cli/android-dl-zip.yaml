@@ -1,0 +1,11 @@
+---
+- name: Local install of Android Studio on Fedora
+  hosts: localhost
+  gather_facts: yes
+
+  tasks: 
+    - name: Download cli android
+      ansible.builtin.unarchive:
+        remote_src: yes
+        src: https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+        dest: "{{ android_path }}"

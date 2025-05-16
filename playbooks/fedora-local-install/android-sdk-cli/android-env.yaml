@@ -1,0 +1,22 @@
+---
+- hosts: localhost
+  
+  tasks: 
+    - name: Set android environment variable
+      ansible.builtin.blockinfile:
+        state: present
+        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-env.bashrc"
+        block: |
+	  # Android
+	  export ANDROID_HOME="$HOME/.local/android"
+	  export ANDROID_USER_HOME="$HOME/.local/android"
+
+    - name: Set android environment path
+      ansible.builtin.blockinfile:
+        state: present
+        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-path.bashrc"
+        block: |
+	  # Android
+          export PATH="$PATH:$ANDROID_HOME/tools"
+          export PATH="$PATH:$ANDROID_HOME/tools/bin"
+          export PATH="$PATH:$ANDROID_HOME/platform-tools"

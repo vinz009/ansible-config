@@ -1,9 +1,0 @@
----
-- name: Local install of Android Studio on Fedora
-  hosts: localhost
-  gather_facts: yes
-
-  tasks:
-    - name: Check sdkmanager
-      ansible.builtin.command:
-        cmd: sdkmanager --version

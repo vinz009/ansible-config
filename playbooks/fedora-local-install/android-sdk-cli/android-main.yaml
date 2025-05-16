@@ -1,0 +1,5 @@
+---
+- name: Local install of Android Studio on Fedora
+  hosts: localhost
+
+- ansible.builtin.import_playbook: android-post.yaml
