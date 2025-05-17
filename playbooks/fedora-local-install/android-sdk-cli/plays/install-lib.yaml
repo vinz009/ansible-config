@@ -1,16 +1,14 @@
 ---
 - hosts: localhost
-  vars:
-    fedora_packages:
-      - zlib-ng.i686
-      - ncurses-libs.i686
-      - bzip2-libs.i686
 
   tasks:
+    - name: Include android variable
+      ansible.builtin.include_vars: vars.yaml
+
     - name: Install required libraries for 64-bit machines fedora linux
       become: yes
       ansible.builtin.dnf:
-        name: "{{ fedora_packages }}"
+        name: "{{ vars.fedora_packages }}"
         state: present
         update_cache: yes
 

@@ -1,0 +1,8 @@
+---
+- hosts: localhost
+
+  tasks:
+    - name: Move directory and files
+      ansible.builtin.unarchive:
+        src: ~/Downloads/commandlinetools-linux-13114758_latest.zip
+        dest: ~/.local/android/

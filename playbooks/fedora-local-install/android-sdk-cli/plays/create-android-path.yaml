@@ -1,11 +1,12 @@
 ---
 - hosts: localhost
-  vars:
-    android_directory: "{{ ansible_env.HOME }}/.local/android"
 
-  tasks: 
+  tasks:
+    - name: Include android path
+      ansible.builtin.include_vars: var.yaml
+
     - name: Create directory
       ansible.builtin.file:
-        path: "{{ android_path }}"
+        path: "{{ var.android_path }}"
         state: directory
         mode: '0755'

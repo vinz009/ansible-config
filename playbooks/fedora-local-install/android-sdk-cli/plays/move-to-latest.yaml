@@ -1,0 +1,21 @@
+---
+- hosts: localhost
+
+  tasks:
+    - name: Include android path
+      ansible.builtin.include_vars: vars.yaml
+
+    - name: Check latest directory exists
+      ansible.builtin.stat:
+        path: "{{ vars.android_path }}/cmdline-tools/latest"
+      register: latest_dir
+
+    - name: Move cli
+      ansible.builtin.command:
+        cmd: "{{ item }}"
+      loop:
+        - "mv {{ vars.android_path }}/cmdline-tools/bin {{ vars.android_path }}/cmdline-tools/latest"
+        - "mv {{ vars.android_path }}/cmdline-tools/lib {{ vars.android_path }}/cmdline-tools/latest"
+        - "mv {{ vars.android_path }}/cmdline-tools/NOTICE.txt {{ vars.android_path }}/cmdline-tools/latest"
+        - "mv {{ vars.android_path }}/cmdline-tools/source.properties {{ vars.android_path }}/cmdline-tools/latest"
+      when: not latest_dir.stat.exists

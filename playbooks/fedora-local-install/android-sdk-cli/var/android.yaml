@@ -1,0 +1,8 @@
+---
+android:
+  sdk_cli_version: 13114758
+  path: ~/.local/android
+  fedora_packages:
+    - zlib-ng.i686
+    - ncurses-libs.i686
+    - bzip2-libs.i686

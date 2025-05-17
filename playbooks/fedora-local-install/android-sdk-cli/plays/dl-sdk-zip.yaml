@@ -1,0 +1,18 @@
+---
+- hosts: localhost
+
+  tasks:
+    - name: Include sdk cli version
+      ansible.builtin.include_vars: ../var/android.yaml
+
+    - name: Check if zip file already downloaded
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/Downloads/ansible/commandlinetools-linux-{{ android.sdk_cli_version }}_latest.zip"
+      register: zip_file
+
+    - name: Download cli android
+      ansible.builtin.get_url:
+        url: "https://dl.google.com/android/repository/commandlinetools-linux-{{ android.sdk_cli_version }}_latest.zip"
+        dest: "{{ ansible_env.HOME }}/Downloads/ansible"
+        mode: '0644'
+      when: not zip_file.stat.exists
