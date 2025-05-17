@@ -11,4 +11,3 @@
         name: "{{ vars.fedora_packages }}"
         state: present
         update_cache: yes
-

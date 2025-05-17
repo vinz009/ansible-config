@@ -40,5 +40,3 @@
     - name: Output go version
       ansible.builtin.debug:
         var: go_current_version
-      
-      
