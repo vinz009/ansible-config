@@ -3,11 +3,11 @@
 
   tasks:
     - name: Include android variable
-      ansible.builtin.include_vars: vars.yaml
+      ansible.builtin.include_vars: ../var/android.yaml
 
     - name: Install required libraries for 64-bit machines fedora linux
       become: yes
       ansible.builtin.dnf:
-        name: "{{ vars.fedora_packages }}"
+        name: "{{ android.fedora_packages }}"
         state: present
         update_cache: yes

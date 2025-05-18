@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+
+  tasks:
+    - name: Set ansible cfg environment variable
+      ansible.builtin.blockinfile:
+        state: present
+        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-env.bashrc"
+        marker: "# {mark} Ansible"
+        block: |
+          export ANSIBLE_CONFIG="$HOME/.config/ansible"

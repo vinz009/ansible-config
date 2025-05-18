@@ -2,7 +2,10 @@
 - hosts: localhost
 
   tasks:
+    - name: Get android variable
+      ansible.builtin.include_vars: ../var/android.yaml
+
     - name: Move directory and files
       ansible.builtin.unarchive:
-        src: ~/Downloads/commandlinetools-linux-13114758_latest.zip
-        dest: ~/.local/android/
+        src: "{{ ansible_env.HOME }}/Downloads/ansible/commandlinetools-linux-{{ android.sdk_cli_version }}_latest.zip"
+        dest: "{{ android.path }}"
