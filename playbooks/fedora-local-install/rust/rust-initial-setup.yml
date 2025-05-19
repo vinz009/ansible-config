@@ -3,24 +3,25 @@
   hosts: localhost
   gather_facts: true
   tasks:
-    - name: Put lines in bashrc from cargo
-      ansible.builtin.lineinfile:
-        path: "{{ ansible_env.HOME }}/.bashrc.d/path-env.bashrc"
-        line: export CARGO_HOME="$HOME/.local/cargo"
-
-    - name: Put lines in bashrc from rustup
-      ansible.builtin.lineinfile:
-        path: "{{ ansible_env.HOME }}/.bashrc.d/path-env.bashrc"
-        line: export RUSTUP_HOME="$HOME/.local/rustup"
+    - name: Set rust environment variables
+      ansible.builtin.blockinfile:
+        append_newline: true
+        prepend_newline: true
+        marker: "# {mark} Rust"
+        state: present
+        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-env.bashrc"
+        block: |
+          export RUSTUP_HOME="$HOME/.usr/rustup"
+          export CARGO_HOME="$HOME/.usr/share/cargo"
 
     - name: Create cargo directory
       ansible.builtin.file:
-        path: "{{ ansible_env.HOME }}/.local/cargo"
+        path: "{{ ansible_env.HOME }}/.usr/cargo"
         state: directory
         mode: '0755'
 
     - name: Create rustup directory
       ansible.builtin.file:
-        path: "{{ ansible_env.HOME }}/.local/rustup"
+        path: "{{ ansible_env.HOME }}/.usr/rustup"
         state: directory
         mode: '0755'

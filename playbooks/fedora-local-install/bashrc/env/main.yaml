@@ -4,4 +4,4 @@
 
 - ansible.builtin.import_playbook: android-env.yaml
 
-- ansible.builtin.import_playbook: ansible-cfg.yaml
+- ansible.builtin.import_playbook: ansible-env.yaml
