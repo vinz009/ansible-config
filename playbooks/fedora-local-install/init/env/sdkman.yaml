@@ -1,0 +1,13 @@
+---
+- hosts: localhost
+
+  tasks:
+    - name: Set sdkman environment variable
+      ansible.builtin.blockinfile:
+        append_newline: true
+        prepend_newline: true
+        state: present
+        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-env.bashrc"
+        marker: "# {mark} SDKman"
+        block: |
+          export SDKMAN_DIR="$HOME/.usr/share/sdkman"

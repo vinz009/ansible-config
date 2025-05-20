@@ -10,8 +10,8 @@
         state: present
         path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-env.bashrc"
         block: |
-          export ANDROID_HOME="$HOME/.local/android"
-          export ANDROID_USER_HOME="$HOME/.local/android"
+          export ANDROID_HOME="$HOME/.usr/share/android"
+          export ANDROID_USER_HOME="$HOME/.usr/share/android"
 
     - name: Set android environment path
       ansible.builtin.blockinfile:

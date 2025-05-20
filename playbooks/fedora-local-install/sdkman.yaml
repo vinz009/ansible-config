@@ -1,0 +1,7 @@
+---
+- hosts: localhost
+
+  tasks:
+    - name: Install script without modifying shell config
+      ansible.builtin.shell:
+        cmd: curl -S "https://get.sdkman.io?ci=true&rcupdate=false" | bash
