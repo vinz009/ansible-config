@@ -3,7 +3,7 @@
 
   tasks:
     - name: Include android path
-      ansible.builtin.include_vars: var.yaml
+      ansible.builtin.include_vars: ../var/android.yaml
 
     - name: Create directory for latest dir in cli
       ansible.builtin.file:
@@ -11,5 +11,5 @@
         state: directory
         mode: '0755'
       loop:
-        - "{{ var.android_path }}/cmdline-tools/latest/bin"
-        - "{{ var.android_path }}/cmdline-tools/latest/lib"
+        - "{{ android.path }}/cmdline-tools/latest/bin"
+        - "{{ android.path }}/cmdline-tools/latest/lib"

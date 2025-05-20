@@ -2,4 +2,16 @@
 - name: Local install of Android Studio on Fedora
   hosts: localhost
 
-- ansible.builtin.import_playbook: android-post.yaml
+- ansible.builtin.import_playbook: ./plays/create-android-path.yaml
+
+- ansible.builtin.import_playbook: ./plays/install-lib.yaml
+
+- ansible.builtin.import_playbook: ./plays/dl-sdk-zip.yaml
+
+- ansible.builtin.import_playbook: ./plays/unarchive-local.yaml
+
+- ansible.builtin.import_playbook: ./plays/create-latest-dir.yaml
+
+- ansible.builtin.import_playbook: ./plays/move-to-latest.yaml
+
+- ansible.builtin.import_playbook: ./plays/check-sdk-version.yaml

@@ -16,12 +16,12 @@
 
     - name: Create cargo directory
       ansible.builtin.file:
-        path: "{{ ansible_env.HOME }}/.usr/cargo"
+        path: "{{ ansible_env.HOME }}/.usr/share/cargo"
         state: directory
         mode: '0755'
 
     - name: Create rustup directory
       ansible.builtin.file:
-        path: "{{ ansible_env.HOME }}/.usr/rustup"
+        path: "{{ ansible_env.HOME }}/.usr/share/rustup"
         state: directory
         mode: '0755'

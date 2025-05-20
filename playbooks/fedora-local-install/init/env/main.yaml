@@ -1,0 +1,7 @@
+---
+- name: Initialize bashrc
+  hosts: localhosts
+
+- ansible.builtin.import_playbook: android.yaml
+
+- ansible.builtin.import_playbook: ansible.yaml
