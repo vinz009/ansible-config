@@ -11,17 +11,15 @@
         state: present
         path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-env.bashrc"
         block: |
-          export RUSTUP_HOME="$HOME/.usr/rustup"
+          export RUSTUP_HOME="$HOME/.usr/share/rustup"
           export CARGO_HOME="$HOME/.usr/share/cargo"
 
-    - name: Create cargo directory
-      ansible.builtin.file:
-        path: "{{ ansible_env.HOME }}/.usr/share/cargo"
-        state: directory
-        mode: '0755'
-
-    - name: Create rustup directory
-      ansible.builtin.file:
-        path: "{{ ansible_env.HOME }}/.usr/share/rustup"
-        state: directory
-        mode: '0755'
+    - name: Set rust environment path
+      ansible.builtin.blockinfile:
+        append_newline: true
+        prepend_newline: true
+        marker: "# {mark} Rust"
+        state: present
+        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-path.bashrc"
+        block: |
+          export PATH="$HOME/.usr/share/cargo/bin:$PATH"

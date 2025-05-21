@@ -1,0 +1,21 @@
+---
+- name: Rust Installer
+  hosts: localhost
+  gather_facts: true
+
+  tasks:
+    - name: Create cargo directory
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/.usr/share/cargo"
+        state: directory
+        mode: '0755'
+
+    - name: Create rustup directory
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/.usr/share/rustup"
+        state: directory
+        mode: '0755'
+
+    - name: Create rust independenly
+      ansible.builtin.shell:
+        cmd: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y

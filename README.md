@@ -1,13 +1,6 @@
 # Ansible Config
 
-## Playbooks to run for local development
+## Playbooks
 
-- Install programs
-- Pull container images from container online repositories
-    (e.g dockerhub, redhat quay, etc)
-- Run local programs
-
-TODO's
-
-- What Happen if a playbook have error?
--
+Local installation of programs under Fedora Linux. For web development and
+devops.
