@@ -13,3 +13,5 @@
 - ansible.builtin.import_playbook: flutter.yaml
 
 - ansible.builtin.import_playbook: clojure.yaml
+
+- ansible.builtin.import_playbook: go.yaml

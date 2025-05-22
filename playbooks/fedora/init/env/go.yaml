@@ -1,0 +1,14 @@
+---
+- name: Install Go Environment Variable
+  hosts: localhost
+  gather_facts: true
+  tasks:
+    - name: Set go environment path
+      ansible.builtin.blockinfile:
+        append_newline: true
+        prepend_newline: true
+        marker: "# {mark} Go"
+        state: present
+        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-path.bashrc"
+        block: |
+          export PATH="$PATH:/usr/local/go/bin"

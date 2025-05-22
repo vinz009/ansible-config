@@ -1,3 +1,4 @@
+---
 - name: Local install of golang
   hosts: localhost
   gather_facts: true
@@ -27,15 +28,21 @@
           - "{{ go_latest_stable_version }}"
           - "{{ go_sha256 }}"
 
+    - name: Create golang directory
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/Downloads/ansible/go"
+        state: directory
+        mode: '0755'
+
     - name: Check if tarfile already exists
       ansible.builtin.stat:
-        path: "{{ ansible_env.HOME }}/Downloads/ansible/{{ go_latest_stable_version }}.linux-amd64.tar.gz"
+        path: "{{ ansible_env.HOME }}/Downloads/ansible/go/{{ go_latest_stable_version }}.linux-amd64.tar.gz"
       register: go_tar_file
 
     - name: Download source code with checksum (sha256)
       ansible.builtin.get_url:
         url: https://go.dev/dl/{{ go_latest_stable_version }}.linux-amd64.tar.gz
-        dest: "{{ ansible_env.HOME }}/Downloads/ansible"
+        dest: "{{ ansible_env.HOME }}/Downloads/ansible/go"
         checksum: "sha256:{{ go_sha256 }}"
         mode: '0644'
       when: not go_tar_file.stat.exists
@@ -44,20 +51,7 @@
       become: true
       ansible.builtin.shell:
         cmd: "rm -rf /usr/local/go && tar -C /usr/local -xzf {{ go_latest_stable_version }}.linux-amd64.tar.gz"
-        chdir: "{{ ansible_env.HOME }}/Downloads/ansible"
-      register: my_output
-      changed_when: my_output.rc != 0
-
-    - name: Ensure export path environment variable is present
-      ansible.builtin.lineinfile:
-        state: present
-        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-path-executable.bashrc"
-        line: export PATH=$PATH:/usr/local/go/bin
-
-    - name: Source environment variable
-      ansible.builtin.shell: source "{{ ansible_env.HOME }}/.bashrc"
-      args:
-        executable: /bin/bash
+        chdir: "{{ ansible_env.HOME }}/Downloads/ansible/go"
       register: my_output
       changed_when: my_output.rc != 0
 
