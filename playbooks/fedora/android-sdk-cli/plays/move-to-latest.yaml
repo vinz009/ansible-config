@@ -7,7 +7,7 @@
 
     - name: Check latest directory exists
       ansible.builtin.stat:
-        path: "{{ android.path }}/cmdline-tools/latest"
+        path: "{{ android.path }}/cmdline-tools/latest/bin"
       register: latest_dir
 
     - name: Move cli

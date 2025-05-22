@@ -11,5 +11,5 @@
         state: directory
         mode: '0755'
       loop:
-        - "{{ android.path }}/cmdline-tools/latest/bin"
-        - "{{ android.path }}/cmdline-tools/latest/lib"
+        - "{{ android.path }}/cmdline-tools/latest"
+        - "{{ android.path }}/cmdline-tools/latest"
