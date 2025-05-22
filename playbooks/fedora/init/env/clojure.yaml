@@ -1,0 +1,14 @@
+---
+- name: Install Clojure Environment Variable
+  hosts: localhost
+  gather_facts: true
+  tasks:
+    - name: Set clojure environment path
+      ansible.builtin.blockinfile:
+        append_newline: true
+        prepend_newline: true
+        marker: "# {mark} Clojure"
+        state: present
+        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-path.bashrc"
+        block: |
+          export PATH="$PATH:/opt/infrastructure/clojure/bin"

@@ -10,12 +10,12 @@
       - rlwrap
 
   tasks:
-    - name: Check pre-requisites dependencies
+    - name: Check pre-requisites dependencies in linux
       become: true
       ansible.builtin.dnf:
-        name: "{{ dependencies }}"
+        name: "{{ item }}"
         state: present
-        update_cache: true
+      loop: "{{ dependencies }}"
 
     - name: Check if installer script exist locally
       ansible.builtin.stat:
@@ -24,8 +24,7 @@
 
     - name: Download linux script installer
       ansible.builtin.get_url:
-        url: "https://github.com/clojure/brew-install/\
-          releases/latest/download/linux-install.sh"
+        url: "https://github.com/clojure/brew-install/releases/latest/download/linux-install.sh"
         dest: "{{ ansible_env.HOME }}/Downloads/ansible/"
         mode: "0755"
       when: not clojure_installer_script.stat.exists
@@ -38,32 +37,17 @@
         mode: '0755'
 
     - name: Clojure exist in package dnf
-      ansible.builtin.package_facts:
-        manager: "dnf"
-      register: packages_dnf
+      ansible.builtin.command: clojure --version
+      register: clojure_program
+      changed_when: "clojure_program.rc != 0"
 
     - name: Execute script
       become: true
-      ansible.builtin.script:
-        cmd: >
-          {{ ansible_env.HOME }}/Downloads/ansible/linux-install.sh
-          --prefix /opt/infrastructure/clojure
-      when: "'clojure' in packages_dnf"
+      ansible.builtin.command: "{{ ansible_env.HOME }}/Downloads/ansible/linux-install.sh --prefix /opt/infrastructure/clojure"
+      when: "clojure_program.rc != 0"
 
     - name: Extend the MANPATH to include on manual pages
       become: true
       ansible.builtin.lineinfile:
         path: /etc/man_db.conf
-        line: >
-          MANPATH_MAP /opt/infrastructure/clojure/bin
-          /opt/infrastructure/clojure/man
-
-    - name: Include path executable
-      ansible.builtin.import_tasks:
-        file: shared/ansible_path_executable.yml
-
-    - name: Ensure clojure optional directory is on PATH environment
-      ansible.builtin.lineinfile:
-        path: "{{ ansible_env.HOME }}/.bashrc.d/\
-          ansible-path-executable.bashrc"
-        line: export PATH="/opt/infrastructure/clojure/bin:$PATH"
+        line: MANPATH_MAP /opt/infrastructure/clojure/bin /opt/infrastructure/clojure/man

@@ -4,11 +4,4 @@
 
   tasks:
     - name: Download latest go version
-      ansible.builtin.uri:
-        url: https://go.dev/dl/?mode=json
-        return_content: true
-      register: response_url
-
-    - name: debug
-      ansible.builtin.debug:
-        var: response_url.json[0].files[1].arch
+      ansible.builtin.command: clojure --version
