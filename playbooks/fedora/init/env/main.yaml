@@ -7,3 +7,7 @@
 - ansible.builtin.import_playbook: ansible.yaml
 
 - ansible.builtin.import_playbook: sdkman.yaml
+
+- ansible.builtin.import_playbook: rust.yaml
+
+- ansible.builtin.import_playbook: flutter.yaml

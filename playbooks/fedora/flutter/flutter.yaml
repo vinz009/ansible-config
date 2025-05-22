@@ -1,91 +1,44 @@
+---
 - name: Flutter local install
   hosts: localhost
   gather_facts: yes
+  vars_files:
+    - ./vars/flutter-vars.yaml
 
   tasks:
-    - name: gather
-      ansible.builtin.include_tasks:
-        file: gather-info.yaml
-
-    - name: Check installed tools
-      vars:
-        package:
-        - bash
-        - file
-        - mkdir
-        - rm
-        - which
-      ansible.builtin.shell:
-        cmd: "which {{ item }}"
-      loop: "{{ package }}"
-      tags:
-      - check_install
-
-    - name: gather package facts
-      ansible.builtin.package_facts:
-        manager: auto
-      tags:
-      - package_facts
-
-    - name: Install pre-requisite packages
+    - name: Install fedora packages
       become: true
-      tags: pre_package
-      vars:
-        package:
-        - curl
-        - git
-        - unzip
-        - xz
-        - zip
-        - mesa-libGLU
       ansible.builtin.dnf:
         name: "{{ item }}"
         state: present
-      loop: "{{ package }}"
+      loop: "{{ flutter.linux_package }}"
 
-    - name: Install pre-requisite for flutter desktop
-      ansible.builtin.include_tasks:
-        file: linux-desktop.yaml
-        apply:
-          tags: desktop
-      tags: always
+    - name: Create flutter directory on Downloads/ansible path
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/Downloads/ansible/flutter"
+        state: directory
+        mode: '0755'
 
-    - name: Include flutter stable latest version
-      ansible.builtin.include_vars:
-        file: flutter-version.yaml
-        name: flutter_version
-
-    - debug:
-        var: flutter_version
-
-    - debug:
-        var: "{{ ansible_env.HOME}}/Downloads"
-      tags: test
-
-    - name: Consider /usr/bin exist to put the binary
+    - name: Check if zip file is already downloaded
       ansible.builtin.stat:
-        path: /usr/bin
-      register: p
+        path: "{{ ansible_env.HOME }}/Downloads/ansible/flutter/flutter_linux_{{ flutter.version }}-stable.tar.xz"
+      register: flutter_sdk
 
-    - name: Check if path exist
-      ansible.builtin.debug:
-        msg: "Path {{ p }} exist and a directory"
-      when: p.stat.isdir is defined and p.stat.isdir
+    - name: Download flutter sdk
+      ansible.builtin.get_url:
+        url: "https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_{{ flutter.version }}-stable.tar.xz"
+        dest: "{{ ansible_env.HOME }}/Downloads/ansible/flutter"
+        mode: '0644'
+        timeout: 600
+      when: not flutter_sdk.stat.exists
 
-    - name: Extract SDK
-      become: yes
+    - name: Check if file is already extracted
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/.usr/share/flutter"
+      register: flutter_dir
+
+    - name: Extract zip file
       ansible.builtin.unarchive:
-        remote_src: yes
-        src: "https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_{{ flutter_version.version }}-stable.tar.xz"
-        dest: /usr/bin
-
-    - name: Ensure flutter path exist on PATH environment
-      ansible.builtin.lineinfile:
-        state: present
-        path: "{{ ansible_env.HOME }}/.bashrc.d/path.bashrc"
-        line: export PATH=/usr/bin/flutter/bin:$PATH
-
-    - name: Source environment variable
-      ansible.builtin.shell: source "{{ ansible_env.HOME }}/.bashrc" && flutter --version
-      args:
-        executable: /bin/bash
+        src: "{{ ansible_env.HOME }}/Downloads/ansible/flutter/flutter_linux_{{ flutter.version }}-stable.tar.xz"
+        dest: "{{ ansible_env.HOME }}/.usr/share"
+      when: not flutter_dir.stat.exists

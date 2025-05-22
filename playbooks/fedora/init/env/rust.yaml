@@ -22,4 +22,4 @@
         state: present
         path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-path.bashrc"
         block: |
-          export PATH="$HOME/.usr/share/cargo/bin:$PATH"
+          export PATH="$PATH:$HOME/.usr/share/cargo/bin"

@@ -1,0 +1,10 @@
+---
+flutter:
+  version: 3.32.0
+  linux_package:
+    - curl
+    - git
+    - unzip
+    - xz
+    - zip
+    - mesa-libGLU

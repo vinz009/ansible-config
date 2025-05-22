@@ -1,0 +1,14 @@
+---
+- name: Install Rust Environment Variable
+  hosts: localhost
+  gather_facts: true
+  tasks:
+    - name: Set flutter environment path
+      ansible.builtin.blockinfile:
+        append_newline: true
+        prepend_newline: true
+        marker: "# {mark} Flutter"
+        state: present
+        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-path.bashrc"
+        block: |
+          export PATH="$PATH:$HOME/.usr/share/flutter/bin"
