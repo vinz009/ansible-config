@@ -3,6 +3,7 @@
   hosts: localhost
   gather_facts: true
   vars:
+    installer_path: "{{ ansible_env.HOME }}/Downloads/ansible/clojure"
     dependencies:
       - bash
       - curl
@@ -10,6 +11,12 @@
       - rlwrap
 
   tasks:
+    - name: Create clojure directory installer path
+      ansible.builtin.file:
+        path: "{{ installer_path }}"
+        state: directory
+        mode: '0755'
+
     - name: Check pre-requisites dependencies in linux
       become: true
       ansible.builtin.dnf:
@@ -19,13 +26,13 @@
 
     - name: Check if installer script exist locally
       ansible.builtin.stat:
-        path: "{{ ansible_env.HOME }}/Downloads/ansible/linux-install.sh"
+        path: "{{ installer_path }}/linux-install.sh"
       register: clojure_installer_script
 
     - name: Download linux script installer
       ansible.builtin.get_url:
         url: "https://github.com/clojure/brew-install/releases/latest/download/linux-install.sh"
-        dest: "{{ ansible_env.HOME }}/Downloads/ansible/"
+        dest: "{{ installer_path }}"
         mode: "0755"
       when: not clojure_installer_script.stat.exists
 
@@ -43,7 +50,7 @@
 
     - name: Execute script
       become: true
-      ansible.builtin.command: "{{ ansible_env.HOME }}/Downloads/ansible/linux-install.sh --prefix /opt/infrastructure/clojure"
+      ansible.builtin.command: "{{ installer_path }}/linux-install.sh --prefix /opt/infrastructure/clojure"
       when: "clojure_program.rc != 0"
 
     - name: Extend the MANPATH to include on manual pages

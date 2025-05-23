@@ -1,6 +1,8 @@
 ---
 - name: Kubernetes kubectl Installation
   hosts: localhost
+  vars:
+    installer_path: "{{ ansible_env.HOME }}/Downloads/ansible/kubernetes"
 
   tasks:
     - name: Get latest kubectl version
@@ -9,29 +11,37 @@
         return_content: true
       register: kubectl_version
 
+    - name: Create kubernetes on Download path
+      ansible.builtin.file:
+        path: "{{ installer_path }}"
+        state: directory
+        mode: '0755'
+
+    - name: Check if kubectl installer is already downloaded
+      ansible.builtin.stat:
+        path: "{{ installer_path }}/kubectl"
+      register: kubectl_installer
+
     - name: Download latest kubectl
       ansible.builtin.uri:
-        url: >
-          https://dl.k8s.io/release/{{ kubectl_version.content }}
-          /bin/linux/amd64/kubectl
-        dest: "{{ ansible_env.HOME }}"
-      register: kubectl
+        url: "https://dl.k8s.io/release/{{ kubectl_version.content }}/bin/linux/amd64/kubectl"
+        dest: "{{ installer_path }}"
+      when: not kubectl_installer.stat.exists
 
     - name: Download kubectl checksum file
       ansible.builtin.uri:
-        url: >
-          https://dl.k8s.io/release/{{ kubectl_version.content }}
-          /bin/linux/amd64/kubectl.sha256
-        dest: "{{ ansible_env.HOME }}
+        url: "https://dl.k8s.io/release/{{ kubectl_version.content }}/bin/linux/amd64/kubectl.sha256"
+        dest: "{{ installer_path }}"
+      when: not kubectl_installer.stat.exists
 
     - name: Validate kubectl with checksum
       ansible.builtin.shell:
         cmd: |
           set -o pipefail
           echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
-        chdir: "{{ ansible_env.HOME }}"
+        chdir: "{{ installer_path }}"
       register: checksum_result
-      changed_when: checksum_result != 0
+      changed_when: checksum_result.rc != 0
 
     - name: Debug checksum_result
       ansible.builtin.debug:
@@ -48,15 +58,13 @@
 
     - name: Move and install kubectl
       become: true
-      ansible.builtin.file:
-        src: "{{ kubectl.path }}"
-        dest: /usr/local/bin/kubectl
-        state: link
-        owner: root
-        group: root
-        mode: "+x"
+      ansible.builtin.command:
+        cmd: install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+        chdir: "{{ installer_path }}"
+      register: install_result
+      changed_when: install_result.rc != 0
 
     - name: Check if kubectl is installed
       ansible.builtin.command: kubectl version --client --output=yaml
       register: client
-      changed_when: client.rc > 1
+      changed_when: client.rc != 0

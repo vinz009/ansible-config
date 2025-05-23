@@ -2,8 +2,16 @@
 - name: Flutter local install
   hosts: localhost
   gather_facts: yes
-  vars_files:
-    - ./vars/flutter-vars.yaml
+  vars:
+    installer_path: "{{ ansible_env.HOME }}/Downloads/ansible/flutter"
+    version: 3.32.0
+    linux_package:
+      - curl
+      - git
+      - unzip
+      - xz
+      - zip
+      - mesa-libGLU
 
   tasks:
     - name: Install fedora packages
@@ -11,23 +19,23 @@
       ansible.builtin.dnf:
         name: "{{ item }}"
         state: present
-      loop: "{{ flutter.linux_package }}"
+      loop: "{{ linux_package }}"
 
     - name: Create flutter directory on Downloads/ansible path
       ansible.builtin.file:
-        path: "{{ ansible_env.HOME }}/Downloads/ansible/flutter"
+        path: "{{ installer_path }}"
         state: directory
         mode: '0755'
 
     - name: Check if zip file is already downloaded
       ansible.builtin.stat:
-        path: "{{ ansible_env.HOME }}/Downloads/ansible/flutter/flutter_linux_{{ flutter.version }}-stable.tar.xz"
+        path: "{{ installer_path }}/flutter_linux_{{ version }}-stable.tar.xz"
       register: flutter_sdk
 
     - name: Download flutter sdk
       ansible.builtin.get_url:
-        url: "https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_{{ flutter.version }}-stable.tar.xz"
-        dest: "{{ ansible_env.HOME }}/Downloads/ansible/flutter"
+        url: "https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_{{ version }}-stable.tar.xz"
+        dest: "{{ installer_path }}"
         mode: '0644'
         timeout: 600
       when: not flutter_sdk.stat.exists
@@ -39,6 +47,6 @@
 
     - name: Extract zip file
       ansible.builtin.unarchive:
-        src: "{{ ansible_env.HOME }}/Downloads/ansible/flutter/flutter_linux_{{ flutter.version }}-stable.tar.xz"
+        src: "{{ installer_path }}/flutter_linux_{{ version }}-stable.tar.xz"
         dest: "{{ ansible_env.HOME }}/.usr/share"
       when: not flutter_dir.stat.exists
