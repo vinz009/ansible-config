@@ -1,7 +1,7 @@
 ---
 - name: Flutter local install
   hosts: localhost
-  gather_facts: yes
+  gather_facts: true
   vars:
     installer_path: "{{ ansible_env.HOME }}/Downloads/ansible/flutter"
     version: 3.32.0

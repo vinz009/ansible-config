@@ -51,6 +51,7 @@
     - name: Execute script
       become: true
       ansible.builtin.command: "{{ installer_path }}/linux-install.sh --prefix /opt/infrastructure/clojure"
+      register: clojure_program
       when: "clojure_program.rc != 0"
 
     - name: Extend the MANPATH to include on manual pages
