@@ -1,0 +1,26 @@
+---
+- name: Vagrant post fedora dnf install
+  hosts: localhost
+  become: true
+
+  tasks:
+    - name: Install vagrant pre-requisite dependencies
+      ansible.builtin.command:
+        cmd: dnf install -y dnf-plugins-core
+      register: result
+      changed_when: result.rc != 0
+
+    - name: Check if hashicorp repo is already on the list
+      ansible.builtin.command:
+        cmd: dnf repolist
+      register: repolist
+
+    - name: Add vagrant repo list with config-manager
+      ansible.builtin.command:
+        cmd: dnf config-manager addrepo --from-repofile=https://rpm.releases.hashicorp.com/fedora/hashicorp.repo
+      when: '"hashicorp" not in repolist.stdout'
+
+    - name: Install vagrant
+      ansible.builtin.dnf:
+        name: 'vagrant'
+        state: present
