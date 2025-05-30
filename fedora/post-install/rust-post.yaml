@@ -1,0 +1,21 @@
+---
+- name: Rust post install
+  hosts: localhost
+
+  tasks:
+    - name: Install uv python package installer
+      ansible.builtin.shell:
+        cmd: curl -LsSf https://astral.sh/uv/install.sh | sh
+      register: uv
+      changed_when: uv.rc != 0
+
+    - name: Install stylua a lua code formatter
+      ansible.builtin.command:
+        cmd: "cargo install {{ item }}" 
+      loop:
+        - "stylua"
+        - "mdbook"
+      register: result
+      changed_when: result.rc != 0
+
+

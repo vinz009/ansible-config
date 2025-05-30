@@ -1,0 +1,10 @@
+---
+- name: Vagrant post fedora dnf install
+  hosts: localhost
+
+  tasks:
+    - name: Install vagrant pre-requisite dependencies
+      ansible.builtin.stat:
+        path: ~/.usr/share/cargo/bin/sss
+      register: result
+
