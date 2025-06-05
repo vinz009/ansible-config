@@ -1,0 +1,14 @@
+---
+- hosts: localhost
+
+  tasks:
+    - name: Set nvmsh environment variable
+      ansible.builtin.blockinfile:
+        append_newline: true
+        prepend_newline: true
+        state: present
+        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-env.bashrc"
+        marker: "# {mark} Nvmsh"
+        block: |
+          export NVM_DIR="$HOME/.usr/share/nvm"
+          export NVM_BIN="$HOME/.usr/share/nvm/bin"

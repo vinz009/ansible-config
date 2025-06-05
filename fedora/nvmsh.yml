@@ -2,46 +2,14 @@
 - name: Install Node Version Manager
   hosts: localhost
   gather_facts: true
+
   tasks:
-    - name: Create if no bash env path found
-      ansible.builtin.import_tasks:
-        file: ./shared/ansible_path.yml
-
-    - name: Put lines in bashrc from nvmsh
-      ansible.builtin.lineinfile:
-        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-path.bashrc"
-        line: export NVM_DIR="$XDG_DATA_HOME/nvm"
-
-    - name: Source ansible env bashrc
-      ansible.builtin.shell: source "{{ ansible_env.HOME }}/.bashrc"
-      args:
-        executable: /bin/bash
-      register: my_output
-      changed_when: my_output.rc != 0
-
-    - name: Create bash env option if not found
-      ansible.builtin.import_tasks:
-        file: shared/ansible_option.yml
-
-    - name: Put lines in nvmsh bashrc
-      ansible.builtin.lineinfile:
-        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-option.bashrc"
-        line: |
-          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-          [ -s "NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-
-    - name: Create temporary empty directory
+    - name: Create /bin nvm directory
       ansible.builtin.file:
-        path: "{{ ansible_env.XDG_DATA_HOME }}/nvm"
+        path: "{{ ansible_env.HOME }}/.usr/share/nvm/bin"
         state: directory
         mode: '0755'
 
-    - name: Install nvm via git
-      ansible.builtin.git:
-        repo: 'https://github.com/nvm-sh/nvm.git'
-        dest: "{{ ansible_env.XDG_DATA_HOME }}/nvm"
-        version: v0.40.1
-
-    - name: Source nvm script
-      ansible.builtin.command: source "{{ ansible_env.NVM_DIR }}/nvm.sh }}"
-      changed_when: false
+    - name: Install nvm
+      ansible.builtin.shell:
+        cmd: PROFILE=/dev/null bash -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash'

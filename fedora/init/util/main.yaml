@@ -1,0 +1,9 @@
+---
+- name: Initialize util script
+  hosts: localhosts
+
+- ansible.builtin.import_playbook: ansible-dir.yaml
+
+- ansible.builtin.import_playbook: bashrc-ansible-create-file.yaml
+
+- ansible.builtin.import_playbook: create-usr-directory.yaml

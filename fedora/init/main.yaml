@@ -1,0 +1,7 @@
+---
+- name: Initialize util script
+  hosts: localhosts
+
+- ansible.builtin.import_playbook: ./util/main.yaml
+
+- ansible.builtin.import_playbook: ./env/main.yaml
