@@ -3,6 +3,17 @@
   hosts: localhost
   gather_facts: true
   tasks:
+
+    - name: Set go environment variables
+      ansible.builtin.blockinfile:
+        append_newline: true
+        prepend_newline: true
+        marker: "# {mark} Go"
+        state: present
+        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-env.bashrc"
+        block: |
+          export GOPATH="$HOME/.usr/share/go"
+
     - name: Set go environment path
       ansible.builtin.blockinfile:
         append_newline: true
@@ -12,3 +23,4 @@
         path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-path.bashrc"
         block: |
           export PATH="$PATH:/usr/local/go/bin"
+          export PATH="$PATH:$HOME/.usr/share/go/bin"

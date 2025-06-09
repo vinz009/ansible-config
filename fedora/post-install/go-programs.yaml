@@ -1,0 +1,12 @@
+---
+- name: Installation golang programs post install
+  hosts: localhost
+
+  tasks:
+    - name: Go programs install
+      ansible.builtin.command:
+        cmd: "go install {{ item }}"
+      loop:
+        - "mvdan.cc/sh/v3/cmd/shfmt@latest"
+      register: result
+      changed_when: result.rc != 0

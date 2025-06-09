@@ -36,6 +36,12 @@
         state: directory
         mode: '0755'
 
+    - name: Create golang usr/share directory
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/.usr/share/go"
+        state: directory
+        mode: '0755'
+
     - name: Check if tarfile already exists
       ansible.builtin.stat:
         path: "{{ installer_path }}/{{ go_latest_stable_version }}.linux-amd64.tar.gz"
