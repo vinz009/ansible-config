@@ -1,7 +1,10 @@
 ---
 - name: Initialize util script
   hosts: localhosts
+  gather_facts: true
 
-- ansible.builtin.import_playbook: ./util/main.yaml
+- name: Include util main
+  ansible.builtin.import_playbook: ./util/main.yaml
 
-- ansible.builtin.import_playbook: ./env/main.yaml
+- name: Include env main
+  ansible.builtin.import_playbook: ./env/main.yaml

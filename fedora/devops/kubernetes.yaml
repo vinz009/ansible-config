@@ -1,8 +1,8 @@
 ---
 - name: Kubernetes kubectl Installation
   hosts: localhost
-  vars:
-    installer_path: "{{ ansible_env.HOME }}/Downloads/ansible/kubernetes"
+  vars_files:
+    - ../vars/vars_all.yaml
 
   tasks:
     - name: Get latest kubectl version
@@ -11,27 +11,27 @@
         return_content: true
       register: kubectl_version
 
-    - name: Create kubernetes on Download path
+    - name: Create directory kubernetes on Download/ansible path
       ansible.builtin.file:
-        path: "{{ installer_path }}"
+        path: "{{ ansible_installer_path }}/kubernetes"
         state: directory
         mode: '0755'
 
     - name: Check if kubectl installer is already downloaded
       ansible.builtin.stat:
-        path: "{{ installer_path }}/kubectl"
+        path: "{{ ansible_installer_path }}/kubernetes/kubectl"
       register: kubectl_installer
 
     - name: Download latest kubectl
       ansible.builtin.uri:
         url: "https://dl.k8s.io/release/{{ kubectl_version.content }}/bin/linux/amd64/kubectl"
-        dest: "{{ installer_path }}"
+        dest: "{{ ansible_installer_path }}/kubernetes"
       when: not kubectl_installer.stat.exists
 
     - name: Download kubectl checksum file
       ansible.builtin.uri:
         url: "https://dl.k8s.io/release/{{ kubectl_version.content }}/bin/linux/amd64/kubectl.sha256"
-        dest: "{{ installer_path }}"
+        dest: "{{ ansible_installer_path }}/kubernetes"
       when: not kubectl_installer.stat.exists
 
     - name: Validate kubectl with checksum
@@ -39,20 +39,20 @@
         cmd: |
           set -o pipefail
           echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
-        chdir: "{{ installer_path }}"
-      register: checksum_result
-      changed_when: checksum_result.rc != 0
+        chdir: "{{ ansible_installer_path }}/kubernetes"
+      register: kubectl_checksum_result
+      changed_when: "kubectl_checksum_result.rc != 0"
 
-    - name: Debug checksum_result
+    - name: Debug checksum result
       ansible.builtin.debug:
-        var: checksum_result
+        var: kubectl_checksum_result
 
     - name: Check if kubectl is OK
       vars:
         expected: "kubectl: OK"
       ansible.builtin.assert:
         that:
-          - checksum_result.stdout == expected
+          - kubectl_checksum_result.stdout == expected
         fail_msg: "kubectl is not legit"
         success_msg: "kubectl is legit"
 
@@ -60,11 +60,11 @@
       become: true
       ansible.builtin.command:
         cmd: install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-        chdir: "{{ installer_path }}"
-      register: install_result
-      changed_when: install_result.rc != 0
+        chdir: "{{ ansible_installer_path }}/kubernetes"
+      register: kubectl_install_result
+      changed_when: "kubectl_install_result.rc != 0"
 
     - name: Check if kubectl is installed
       ansible.builtin.command: kubectl version --client --output=yaml
-      register: client
-      changed_when: client.rc != 0
+      register: kubectl_client
+      changed_when: "kubectl_client.rc != 0"

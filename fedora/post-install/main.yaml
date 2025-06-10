@@ -1,9 +1,13 @@
 ---
 - name: Initiate post install
   hosts: localhosts
+  gather_facts: true
 
-- ansible.builtin.import_playbook: ./go-programs.yaml
+- name: Include go programs
+  ansible.builtin.import_playbook: ./go-programs.yaml
 
-- ansible.builtin.import_playbook: ./rust-programs.yaml
+- name: Include rust programs
+  ansible.builtin.import_playbook: ./rust-programs.yaml
 
-- ansible.builtin.import_playbook: ./vagrant.yaml
+- name: Include vagrant
+  ansible.builtin.import_playbook: ./vagrant.yaml
