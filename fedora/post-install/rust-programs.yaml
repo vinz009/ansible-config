@@ -11,11 +11,9 @@
 
     - name: Install stylua a lua code formatter
       ansible.builtin.command:
-        cmd: "cargo install {{ item }}" 
+        cmd: "cargo install {{ item }}"
       loop:
         - "stylua"
         - "mdbook"
       register: result
       changed_when: result.rc != 0
-
-

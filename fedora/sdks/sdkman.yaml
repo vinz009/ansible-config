@@ -1,24 +1,24 @@
 ---
 - name: Local install sdkman
   hosts: localhost
-  vars:
-    installer_path: "{{ ansible_env.HOME }}/Downloads/ansible/sdkman"
+  vars_files:
+    - ../vars/vars_all.yaml
 
   tasks:
-    - name: Create ansible download sdkman path
+    - name: Create ansible Download/ansible sdkman path
       ansible.builtin.file:
-        path: "{{ installer_path }}"
+        path: "{{ ansible_installer_path }}/sdkman"
         state: directory
         mode: '0755'
 
     - name: Download sdkman script
       ansible.builtin.get_url:
         url: "https://get.sdkman.io?ci=true&rcupdate=false"
-        dest: "{{ installer_path }}/sdkman-install.sh"
+        dest: "{{ ansible_installer_path }}/sdkman/sdkman-install.sh"
         mode: '0755'
 
     - name: Execute sdkman shellscript
       ansible.builtin.command:
-        cmd: "{{ installer_path }}/sdkman-install.sh"
+        cmd: "{{ ansible_installer_path }}/sdkman/sdkman-install.sh"
       register: sdkman_install
       changed_when: sdkman_install.rc != 0

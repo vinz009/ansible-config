@@ -1,0 +1,9 @@
+---
+- name: Initiate post install
+  hosts: localhosts
+
+- ansible.builtin.import_playbook: ./go-programs.yaml
+
+- ansible.builtin.import_playbook: ./rust-programs.yaml
+
+- ansible.builtin.import_playbook: ./vagrant.yaml

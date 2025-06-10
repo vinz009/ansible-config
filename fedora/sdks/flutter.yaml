@@ -3,8 +3,7 @@
   hosts: localhost
   gather_facts: true
   vars:
-    installer_path: "{{ ansible_env.HOME }}/Downloads/ansible/flutter"
-    version: 3.32.0
+    flutter_version: 3.32.0
     linux_package:
       - curl
       - git
@@ -12,9 +11,11 @@
       - xz
       - zip
       - mesa-libGLU
+  vars_files:
+    - ../vars/vars_all.yaml
 
   tasks:
-    - name: Install fedora packages
+    - name: Install fedora packages flutter package prerequisites
       become: true
       ansible.builtin.dnf:
         name: "{{ item }}"
@@ -23,30 +24,30 @@
 
     - name: Create flutter directory on Downloads/ansible path
       ansible.builtin.file:
-        path: "{{ installer_path }}"
+        path: "{{ ansible_installer_path }}/flutter"
         state: directory
         mode: '0755'
 
     - name: Check if zip file is already downloaded
       ansible.builtin.stat:
-        path: "{{ installer_path }}/flutter_linux_{{ version }}-stable.tar.xz"
+        path: "{{ ansible_installer_path }}/flutter/flutter_linux_{{ flutter_version }}-stable.tar.xz"
       register: flutter_sdk
 
     - name: Download flutter sdk
       ansible.builtin.get_url:
-        url: "https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_{{ version }}-stable.tar.xz"
-        dest: "{{ installer_path }}"
+        url: "https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_{{ flutter_version }}-stable.tar.xz"
+        dest: "{{ ansible_installer_path }}/flutter"
         mode: '0644'
         timeout: 600
       when: not flutter_sdk.stat.exists
 
     - name: Check if file is already extracted
       ansible.builtin.stat:
-        path: "{{ ansible_env.HOME }}/.usr/share/flutter"
-      register: flutter_dir
+        path: "{{ ansible_user_path }}/flutter"
+      register: flutter_directory
 
     - name: Extract zip file
       ansible.builtin.unarchive:
-        src: "{{ installer_path }}/flutter_linux_{{ version }}-stable.tar.xz"
+        src: "{{ ansible_installer_path }}/flutter/flutter_linux_{{ flutter_version }}-stable.tar.xz"
         dest: "{{ ansible_env.HOME }}/.usr/share"
-      when: not flutter_dir.stat.exists
+      when: not flutter_directory.stat.exists
