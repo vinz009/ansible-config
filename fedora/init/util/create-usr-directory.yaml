@@ -1,9 +1,0 @@
----
-- hosts: localhost
-
-  tasks:
-    - name: Create directory for latest dir in cli
-      ansible.builtin.file:
-        path: "{{ ansible_env.HOME }}/.usr/share"
-        state: directory
-        mode: '0755'

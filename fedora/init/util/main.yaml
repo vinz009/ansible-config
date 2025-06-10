@@ -1,9 +1,10 @@
 ---
 - name: Initialize util script
   hosts: localhosts
+  gather_facts: true
 
-- ansible.builtin.import_playbook: ansible-dir.yaml
+- name: Include ansible directories
+  ansible.builtin.import_playbook: ansible-directories.yaml
 
-- ansible.builtin.import_playbook: bashrc-ansible-create-file.yaml
-
-- ansible.builtin.import_playbook: create-usr-directory.yaml
+- name: Include ansible env variables
+  ansible.builtin.import_playbook: ansible-env-variables.yaml
