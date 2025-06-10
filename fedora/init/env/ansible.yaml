@@ -1,5 +1,7 @@
 ---
-- hosts: localhost
+- name: Set ansible environment variable
+  hosts: localhost
+  gather_facts: true
 
   tasks:
     - name: Set ansible cfg environment variable

@@ -2,8 +2,8 @@
 - name: Install Go Environment Variable
   hosts: localhost
   gather_facts: true
-  tasks:
 
+  tasks:
     - name: Set go environment variables
       ansible.builtin.blockinfile:
         append_newline: true

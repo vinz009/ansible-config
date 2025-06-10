@@ -2,6 +2,7 @@
 - name: Install Rust Environment Variable
   hosts: localhost
   gather_facts: true
+
   tasks:
     - name: Set rust environment variables
       ansible.builtin.blockinfile:

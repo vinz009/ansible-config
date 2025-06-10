@@ -1,0 +1,9 @@
+---
+- name: Initialize sdk install
+  hosts: localhosts
+
+- ansible.builtin.import_playbook: ./android.yaml
+
+- ansible.builtin.import_playbook: ./flutter.yaml
+
+- ansible.builtin.import_playbook: ./sdkman.yaml

@@ -1,5 +1,7 @@
 ---
-- hosts: localhost
+- name: Set nvmsh environment variable
+  hosts: localhost
+  gather_facts: true
 
   tasks:
     - name: Set nvmsh environment variable

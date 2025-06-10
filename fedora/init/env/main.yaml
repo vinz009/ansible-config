@@ -1,17 +1,28 @@
 ---
 - name: Initialize bashrc
   hosts: localhosts
+  gather_facts: true
 
-- ansible.builtin.import_playbook: android.yaml
+- name: Include android playbook
+  ansible.builtin.import_playbook: android.yaml
 
-- ansible.builtin.import_playbook: ansible.yaml
+- name: Include ansible playbook
+  ansible.builtin.import_playbook: ansible.yaml
 
-- ansible.builtin.import_playbook: sdkman.yaml
+- name: Include clojure playbook
+  ansible.builtin.import_playbook: clojure.yaml
 
-- ansible.builtin.import_playbook: rust.yaml
+- name: Include flutter playbook
+  ansible.builtin.import_playbook: flutter.yaml
 
-- ansible.builtin.import_playbook: flutter.yaml
+- name: Include go playbook
+  ansible.builtin.import_playbook: go.yaml
 
-- ansible.builtin.import_playbook: clojure.yaml
+- name: Include nvmsh playbook
+  ansible.builtin.import_playbook: nvmsh.yaml
 
-- ansible.builtin.import_playbook: go.yaml
+- name: Include rust playbook
+  ansible.builtin.import_playbook: rust.yaml
+
+- name: Include sdkman playbook
+  ansible.builtin.import_playbook: sdkman.yaml

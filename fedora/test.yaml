@@ -1,7 +1,0 @@
-- name: Local install of golang
-  hosts: localhost
-  gather_facts: true
-
-  tasks:
-    - name: Download latest go version
-      ansible.builtin.command: clojure --version

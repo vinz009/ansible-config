@@ -1,7 +1,8 @@
 ---
-- name: Install Rust Environment Variable
+- name: Install flutter environment variable
   hosts: localhost
   gather_facts: true
+
   tasks:
     - name: Set flutter environment path
       ansible.builtin.blockinfile:
