@@ -3,21 +3,22 @@
   hosts: localhost
   gather_facts: true
   vars:
-    installer_path: "{{ ansible_env.HOME }}/Downloads/ansible/clojure"
     dependencies:
       - bash
       - curl
       - java-latest-openjdk
       - rlwrap
+  vars_files:
+    - ../vars/vars_all.yaml
 
   tasks:
     - name: Create clojure directory installer path
       ansible.builtin.file:
-        path: "{{ installer_path }}"
+        path: "{{ ansible_installer_path }}/clojure"
         state: directory
         mode: '0755'
 
-    - name: Check pre-requisites dependencies in linux
+    - name: Verify pre-requisites dependencies in linux is installed
       become: true
       ansible.builtin.dnf:
         name: "{{ item }}"
@@ -26,13 +27,13 @@
 
     - name: Check if installer script exist locally
       ansible.builtin.stat:
-        path: "{{ installer_path }}/linux-install.sh"
+        path: "{{ ansible_installer_path }}/clojure/linux-install.sh"
       register: clojure_installer_script
 
     - name: Download linux script installer
       ansible.builtin.get_url:
         url: "https://github.com/clojure/brew-install/releases/latest/download/linux-install.sh"
-        dest: "{{ installer_path }}"
+        dest: "{{ ansible_installer_path }}/clojure"
         mode: "0755"
       when: not clojure_installer_script.stat.exists
 
@@ -46,16 +47,17 @@
     - name: Clojure exist in package dnf
       ansible.builtin.command: clojure --version
       register: clojure_program
+      ignore_errors: true
       changed_when: "clojure_program.rc != 0"
 
-    - name: Execute script
+    - name: Execute installer clojure script
       become: true
-      ansible.builtin.command: "{{ installer_path }}/linux-install.sh --prefix /opt/infrastructure/clojure"
-      register: clojure_program
+      ansible.builtin.command: "{{ ansible_installer_path }}/clojure/linux-install.sh --prefix /opt/infrastructure/clojure"
       when: "clojure_program.rc != 0"
+      changed_when: "clojure_program.rc != 0"
 
     - name: Extend the MANPATH to include on manual pages
       become: true
       ansible.builtin.lineinfile:
         path: /etc/man_db.conf
-        line: MANPATH_MAP /opt/infrastructure/clojure/bin /opt/infrastructure/clojure/man
+        line: MANPATH_MAP /opt/infrastructure/clojure/bin /opt/infrastructure/clojure/share/man
