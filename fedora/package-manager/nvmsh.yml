@@ -3,7 +3,7 @@
   hosts: localhost
   gather_facts: true
   vars_files:
-    - vars_all.yaml
+    - ../vars/vars_all.yaml
 
   tasks:
     - name: Create usr/share/nvm/bin directory

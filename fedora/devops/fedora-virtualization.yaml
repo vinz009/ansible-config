@@ -1,0 +1,31 @@
+---
+- name: Fedora Virtualization
+  hosts: localhost
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Install virtualization pre-requisite dependencies
+      ansible.builtin.command:
+        cmd: dnf group install -y --with-optional virtualization
+      register: dnf_result
+      changed_when: 'dnf_result.rc != 0'
+
+    - name: Start libvirt service on boot
+      ansible.builtin.systemd_service:
+        name: libvirtd
+        enabled: true
+        masked: false
+
+    - name: Verify KVM kernel modules loaded
+      ansible.builtin.shell:
+        cmd: |
+          set -o pipefail
+          lsmod | grep "kvm"
+      register: kvm
+      changed_when: 'kvm.rc != 0'
+
+    - name: Install podman
+      ansible.builtin.dnf:
+        name: 'podman'
+        state: present

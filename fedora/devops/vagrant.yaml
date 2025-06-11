@@ -8,17 +8,20 @@
       ansible.builtin.command:
         cmd: dnf install -y dnf-plugins-core
       register: result
-      changed_when: result.rc != 0
+      changed_when: 'result.rc != 0'
 
     - name: Check if hashicorp repo is already on the list
       ansible.builtin.command:
         cmd: dnf repolist
-      register: repolist
+      register: vagrant_repolist
+      changed_when: 'vagrant_repolist.rc != 0'
 
     - name: Add vagrant repo list with config-manager
       ansible.builtin.command:
         cmd: dnf config-manager addrepo --from-repofile=https://rpm.releases.hashicorp.com/fedora/hashicorp.repo
-      when: '"hashicorp" not in repolist.stdout'
+      when: '"hashicorp" not in vagrant_repolist.stdout'
+      register: conf_manager
+      changed_when: 'conf_manager.rc != 0'
 
     - name: Install vagrant
       ansible.builtin.dnf:
