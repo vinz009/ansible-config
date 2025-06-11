@@ -1,0 +1,41 @@
+---
+- name: Install third party software
+  hosts: localhost
+  become: true
+  vars:
+    brave_repo: https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo
+    sublime_gpg_key: https://download.sublimetext.com/sublimehq-rpm-pub.gpg
+    sublime_repo: https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo
+
+  tasks:
+    - name: Install brave browser pre-requisite dependencies
+      ansible.builtin.dnf5:
+        name: dnf-plugins-core
+        state: present
+
+    - name: Add brave browser repo list with config-manager dnf5
+      ansible.builtin.command:
+        cmd: "dnf config-manager addrepo --overwrite --from-repofile={{ brave_repo }}"
+      register: brave_repo
+      changed_when: 'brave_repo.rc != 0'
+
+    - name: Install brave browser
+      ansible.builtin.dnf5:
+        name: 'brave-browser'
+        state: present
+
+    - name: Import sublime dnf GPG key
+      ansible.builtin.rpm_key:
+        state: present
+        key: "{{ sublime_gpg_key }}"
+
+    - name: Add sublime repo list with config-manager dnf5
+      ansible.builtin.command:
+        cmd: "dnf config-manager addrepo --overwrite --from-repofile={{ sublime_repo }}"
+      register: sublime_repo
+      changed_when: 'sublime_repo.rc != 0'
+
+    - name: Install sublime text
+      ansible.builtin.dnf5:
+        name: 'sublime-text'
+        state: present
