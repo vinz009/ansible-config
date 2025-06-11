@@ -27,3 +27,15 @@
         state: touch
         mode: '0644'
       when: not ansible_path_bashrc.stat.exists
+
+    - name: Ensure Ansible UTIL bashrc exist
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-util.bashrc"
+      register: ansible_util_bashrc
+
+    - name: Create Ansible UTIL bashrc if not created
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-util.bashrc"
+        state: touch
+        mode: '0644'
+      when: not ansible_util_bashrc.stat.exists

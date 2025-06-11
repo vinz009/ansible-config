@@ -24,3 +24,13 @@
         path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-path.bashrc"
         block: |
           export PATH="$PATH:$HOME/.usr/share/cargo/bin"
+
+    - name: Set rust environment util
+      ansible.builtin.blockinfile:
+        append_newline: true
+        prepend_newline: true
+        marker: "# {mark} Rust"
+        state: present
+        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-util.bashrc"
+        block: |
+          source "{{ ansible_env.HOME }}/.usr/share/cargo/env"
