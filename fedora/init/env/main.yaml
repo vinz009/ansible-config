@@ -24,5 +24,8 @@
 - name: Include rust playbook
   ansible.builtin.import_playbook: rust.yaml
 
+- name: Include rust playbook
+  ansible.builtin.import_playbook: ruby.yaml
+
 - name: Include sdkman playbook
   ansible.builtin.import_playbook: sdkman.yaml

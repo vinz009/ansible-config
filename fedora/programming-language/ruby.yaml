@@ -1,0 +1,22 @@
+---
+- name: Ruby rbenv Installer
+  hosts: localhost
+  gather_facts: true
+  vars:
+    rbenv_repo: https://github.com/rbenv/rbenv.git
+  vars_files:
+    - ../vars/vars_all.yaml
+
+  tasks:
+
+    - name: Git clone rbenv
+      ansible.builtin.git:
+        repo: "{{ rbenv_repo }}"
+        dest: "{{ ansible_user_path }}/rbenv"
+        clone: true # noqa: latest
+
+    - name: Git clone rbenv
+      ansible.builtin.git:
+        repo: https://github.com/rbenv/ruby-build.git
+        dest: "{{ ansible_user_path }}/rbenv/plugins/ruby-build"
+        clone: true # noqa: latest

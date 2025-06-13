@@ -6,10 +6,10 @@
 
   tasks:
     - name: Install virtualization pre-requisite dependencies
-      ansible.builtin.command:
-        cmd: dnf group install -y --with-optional virtualization
-      register: dnf_result
-      changed_when: 'dnf_result.rc != 0'
+      ansible.builtin.dnf5:
+        name: '@virtualization'
+        state: present
+        install_weak_deps: true
 
     - name: Start libvirt service on boot
       ansible.builtin.systemd_service:

@@ -1,0 +1,25 @@
+---
+- name: Set rbenv environment variable
+  hosts: localhost
+  gather_facts: true
+
+  tasks:
+    - name: Set rbenv environment variable
+      ansible.builtin.blockinfile:
+        append_newline: true
+        prepend_newline: true
+        state: present
+        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-env.bashrc"
+        marker: "# {mark} Rbenv"
+        block: |
+          export RBENV_ROOT="$HOME/.usr/share/rbenv"
+
+    - name: Set rbenv environment path variable
+      ansible.builtin.blockinfile:
+        append_newline: true
+        prepend_newline: true
+        state: present
+        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-path.bashrc"
+        marker: "# {mark} Rbenv"
+        block: |
+          export PATH="$PATH:$HOME/.usr/share/rbenv/bin"
