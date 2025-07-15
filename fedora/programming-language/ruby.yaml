@@ -4,10 +4,30 @@
   gather_facts: true
   vars:
     rbenv_repo: https://github.com/rbenv/rbenv.git
+    rbenv_prerequisites:
+      - autoconf
+      - automake
+      - bison
+      - gcc-c++
+      - libffi-devel
+      - libtool
+      - libyaml-devel
+      - openssl-devel
+      - patch
+      - readline-devel
+      - sqlite-devel
+      - zlib-ng-compat-devel
   vars_files:
     - ../vars/vars_all.yaml
 
   tasks:
+
+    - name: Install rbenv prerequisite
+      become: true
+      ansible.builtin.dnf:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ rbenv_prerequisites }}"
 
     - name: Git clone rbenv
       ansible.builtin.git:
