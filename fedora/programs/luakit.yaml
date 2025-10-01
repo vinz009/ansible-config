@@ -1,0 +1,26 @@
+---
+- name: Luakit local Install
+  hosts: localhost
+  gather_facts: true
+  vars:
+    dependenciess:
+      - lua
+      - luajit
+      - luajit-devel
+      - gtk3-devel
+      - webkit2gtk4.1-devel
+      - lua5.1-filesystem
+
+  tasks:
+    - name: Install fedora dependencies
+      become: true
+      ansible.builtin.dnf:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ dependenciess }}"
+
+    - name: Clone luakit repo
+      ansible.builtin.git:
+        repo: 'https://github.com/luakit/luakit.git'
+        dest: "{{ ansible_env.HOME }}/tmp/"
+        clone: true
