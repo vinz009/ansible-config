@@ -17,6 +17,8 @@
       - readline-devel
       - sqlite-devel
       - zlib-ng-compat-devel
+    ruby_extra:
+      - ruby-devel
   vars_files:
     - ../vars/vars_all.yaml
 
@@ -28,6 +30,13 @@
         name: "{{ item }}"
         state: present
       loop: "{{ rbenv_prerequisites }}"
+
+    - name: Install extra ruby dependencies
+      become: true
+      ansible.builtin.dnf:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ ruby_extra }}"
 
     - name: Git clone rbenv
       ansible.builtin.git:
