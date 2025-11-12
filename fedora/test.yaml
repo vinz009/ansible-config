@@ -1,0 +1,12 @@
+- name: keu
+  hosts: localhost
+
+  tasks:
+    - name: test
+      ansible.builtin.command:
+        cmd: kubectl version --client
+      register: kubever
+
+    - name: deb
+      ansible.builtin.debug:
+        msg: "{{ kubever.stdout_lines | regex_search('v([0-9]).([0-9]+).([0-9])') }}"
