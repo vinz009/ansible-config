@@ -12,8 +12,8 @@
         path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-env.bashrc"
         marker: "# {mark} Nvmsh"
         block: |
-          export NVM_DIR="$HOME/.usr/share/nvm"
-          export NVM_BIN="$HOME/.usr/share/nvm/bin"
+          export NVM_DIR="$HOME/.usr/envmanager/nvm"
+          export NVM_BIN="$HOME/.bin"
 
     - name: Set nvmsh environment util
       ansible.builtin.blockinfile:

@@ -4,15 +4,11 @@
   gather_facts: true
 
   tasks:
-    - name: Create bash env if not found
-      ansible.builtin.import_tasks:
-        file: ./shared/ansible_path.yml
-
     - name: Set environment variable
       ansible.builtin.lineinfile:
         state: present
-        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-path.bashrc"
-        line: "export MINIKUBE_HOME={{ ansible_env.HOME }}/opt/minikube"
+        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-env.bashrc"
+        line: "export MINIKUBE_HOME={{ ansible_env.HOME }}/.opt/minikube"
 
     - name: Create minikube directory in /opt
       become: true

@@ -3,6 +3,9 @@
   hosts: localhosts
   gather_facts: true
 
+- name: Include main bash env
+  ansible.builtin.import_playbook: ansible-bash-env.yaml
+
 - name: Include android playbook
   ansible.builtin.import_playbook: android.yaml
 

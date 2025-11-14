@@ -1,0 +1,89 @@
+---
+- name: Create ansible directories
+  hosts: localhost
+  gather_facts: true
+
+  tasks:
+    - name: Get stats of /.ansible in HOME
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/.ansible"
+      register: ansible
+
+    - name: Create /.ansible  directory
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/.ansible"
+        state: directory
+        mode: '0755'
+      when: not ansible.stat.exists
+
+    - name: Get stats of /.ansible/opt
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/.ansible/opt"
+      register: ansible_opt
+
+    - name: Create /.ansible/opt  directory
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/.ansible/opt"
+        state: directory
+        mode: '0755'
+      when: not ansible_opt.stat.exists
+
+    - name: Get stats of /.ansible/bin directory
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/.ansible/bin"
+      register: ansible_bin
+
+    - name: Create /.ansible/bin  directory
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/.ansible/bin"
+        state: directory
+        mode: '0755'
+      when: not ansible_bin.stat.exists
+
+    - name: Get stats of /.ansible/envmanager directory
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/.ansible/envmanager"
+      register: ansible_envmanager
+
+    - name: Create /.ansible/envmanager directory
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/.ansible/envmanager"
+        state: directory
+        mode: '0755'
+      when: not ansible_envmanager.stat.exists
+
+    - name: Get stats of /.ansible/sdk directory
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/.ansible/sdk"
+      register: ansible_sdk
+
+    - name: Create /.ansible/sdk directory
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/.ansible/sdk"
+        state: directory
+        mode: '0755'
+      when: not ansible_sdk.stat.exists
+
+    - name: Get stats of /.ansible/share directory
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/.ansible/share"
+      register: ansible_share
+
+    - name: Create /.ansible/share directory
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/.ansible/share"
+        state: directory
+        mode: '0755'
+      when: not ansible_share.stat.exists
+
+    - name: Get stats of /.ansible/proglang directory
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/.ansible/proglang"
+      register: ansible_proglang
+
+    - name: Create /.ansible/proglang directory
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/.ansible/proglang"
+        state: directory
+        mode: '0755'
+      when: not ansible_proglang.stat.exists

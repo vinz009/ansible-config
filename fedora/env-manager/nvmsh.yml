@@ -2,15 +2,13 @@
 - name: Install Node Version Manager
   hosts: localhost
   gather_facts: true
-  vars_files:
-    - ../vars/vars_all.yaml
 
   tasks:
-    - name: Create usr/share/nvm/bin directory
-      ansible.builtin.file:
-        path: "{{ ansible_user_path }}/nvm/bin"
-        state: directory
-        mode: '0755'
+    # - name: Create usr/share/nvm/bin directory
+    #   ansible.builtin.file:
+    #     path: "{{ ansible_user_path }}/nvm/bin"
+    #     state: directory
+    #     mode: '0755'
 
     - name: Install nvm script
       ansible.builtin.shell:

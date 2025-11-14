@@ -1,3 +1,0 @@
----
-ansible_installer_path: "{{ ansible_env.HOME }}/Downloads/ansible"
-ansible_user_path: "{{ ansible_env.HOME }}/.usr/share"
