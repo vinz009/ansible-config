@@ -12,7 +12,7 @@
         state: present
         path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-env.bashrc"
         block: |
-          export GOPATH="$HOME/.usr/share/go"
+          export GOPATH="$HOME/.ansible/proglang/go"
 
     - name: Set go environment path
       ansible.builtin.blockinfile:
@@ -23,4 +23,4 @@
         path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-path.bashrc"
         block: |
           export PATH="$PATH:/usr/local/go/bin"
-          export PATH="$PATH:$HOME/.usr/share/go/bin"
+          export PATH="$PATH:$HOME/.ansible/proglang/go/bin"

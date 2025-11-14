@@ -12,4 +12,4 @@
         state: present
         path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-path.bashrc"
         block: |
-          export PATH="$PATH:/opt/infrastructure/clojure/bin"
+          export PATH="$PATH:${HOME}/.ansible/opt/infrastructure/clojure/bin"

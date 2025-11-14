@@ -12,9 +12,9 @@
         path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-env.bashrc"
         marker: "# {mark} Ansible"
         block: |
-          export ANSIBLE_HOME="$HOME/.usr/share/ansible"
+          export ANSIBLE_HOME="$HOME/.ansible/share/ansible"
           export ANSIBLE_CONFIG="$HOME/.config/ansible"
           export ANSIBLE_INVENTORY="$HOME/.config/ansible/inventory.ini"
-          export ANSIBLE_LOCAL_TEMP="$HOME/.usr/share/ansible/tmp"
-          export ANSIBLE_REMOTE_TEMP="$HOME/.usr/share/ansible/tmp"
+          export ANSIBLE_LOCAL_TEMP="$HOME/.ansible/share/ansible/tmp"
+          export ANSIBLE_REMOTE_TEMP="$HOME/.ansible/share/ansible/tmp"
           export ANSIBLE_TRANSPORT=local

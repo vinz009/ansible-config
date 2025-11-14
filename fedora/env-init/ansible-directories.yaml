@@ -87,3 +87,15 @@
         state: directory
         mode: '0755'
       when: not ansible_proglang.stat.exists
+
+    - name: Get stats of /.ansible/packagemanager directory
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/.ansible/packagemanager"
+      register: ansible_packagemanager
+
+    - name: Create /.ansible/packagemanager directory
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/.ansible/packagemanager"
+        state: directory
+        mode: '0755'
+      when: not ansible_packagemanager.stat.exists

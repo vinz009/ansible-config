@@ -12,7 +12,7 @@
         path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-env.bashrc"
         marker: "# {mark} Rbenv"
         block: |
-          export RBENV_ROOT="$HOME/.usr/share/rbenv"
+          export RBENV_ROOT="$HOME/.ansible/envmanager/rbenv"
 
     - name: Set rbenv environment path variable
       ansible.builtin.blockinfile:
@@ -22,4 +22,4 @@
         path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-path.bashrc"
         marker: "# {mark} Rbenv"
         block: |
-          export PATH="$PATH:$HOME/.usr/share/rbenv/bin"
+          export PATH="$PATH:$HOME/.ansible/envmanager/rbenv/bin"
