@@ -9,17 +9,17 @@
         append_newline: true
         prepend_newline: true
         state: present
-        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-env.bashrc"
+        path: "{{ ansible_env.HOME }}/DevOps/bashrc.d/env.bashrc"
         marker: "# {mark} Rbenv"
         block: |
-          export RBENV_ROOT="$HOME/.ansible/envmanager/rbenv"
+          export RBENV_ROOT="$HOME/DevOps/envmanager/rbenv"
 
     - name: Set rbenv environment path variable
       ansible.builtin.blockinfile:
         append_newline: true
         prepend_newline: true
         state: present
-        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-path.bashrc"
+        path: "{{ ansible_env.HOME }}/DevOps/bashrc.d/path.bashrc"
         marker: "# {mark} Rbenv"
         block: |
-          export PATH="$PATH:$HOME/.ansible/envmanager/rbenv/bin"
+          export PATH="$PATH:$HOME/DevOps/envmanager/rbenv/bin"

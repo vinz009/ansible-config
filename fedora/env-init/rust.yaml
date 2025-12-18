@@ -10,10 +10,10 @@
         prepend_newline: true
         marker: "# {mark} Rust"
         state: present
-        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-env.bashrc"
+        path: "{{ ansible_env.HOME }}/DevOps/bashrc.d/env.bashrc"
         block: |
-          export RUSTUP_HOME="$HOME/.usr/share/rustup"
-          export CARGO_HOME="$HOME/.usr/share/cargo"
+          export RUSTUP_HOME="$HOME/DevOps/share/rustup"
+          export CARGO_HOME="$HOME/DevOps/proglang/cargo"
 
     - name: Set rust environment path
       ansible.builtin.blockinfile:
@@ -21,9 +21,9 @@
         prepend_newline: true
         marker: "# {mark} Rust"
         state: present
-        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-path.bashrc"
+        path: "{{ ansible_env.HOME }}/DevOps/bashrc.d/path.bashrc"
         block: |
-          export PATH="$PATH:$HOME/.usr/share/cargo/bin"
+          export PATH="$PATH:$HOME/DevOps/proglang/cargo/bin"
 
     - name: Set rust environment util
       ansible.builtin.blockinfile:
@@ -31,6 +31,6 @@
         prepend_newline: true
         marker: "# {mark} Rust"
         state: present
-        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-util.bashrc"
+        path: "{{ ansible_env.HOME }}/DevOps/bashrc.d/util.bashrc"
         block: |
-          source "{{ ansible_env.HOME }}/.usr/share/cargo/env"
+          source "{{ ansible_env.HOME }}/DevOps/proglang/cargo/env"

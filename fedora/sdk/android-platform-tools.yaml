@@ -2,29 +2,27 @@
 - name: Local install of Android platform tools for linux
   hosts: localhost
   gather_facts: true
-  vars_files:
-    - ../vars/vars_all.yaml
 
   tasks:
     - name: Check if zip file already downloaded
       ansible.builtin.stat:
-        path: "{{ ansible_installer_path }}/android/platform-tools-latest-linux.zip"
+        path: /tmp/platform-tools-latest-linux.zip
       register: android_zip_file
 
     - name: Download cli android sdk
       ansible.builtin.get_url:
         url: "https://dl.google.com/android/repository/platform-tools-latest-linux.zip"
-        dest: "{{ ansible_installer_path }}/android"
+        dest: /tmp/platform-tools-latest-linux.zip
         mode: '0644'
       when: not android_zip_file.stat.exists
 
     - name: Check if android zip file is already extracted
       ansible.builtin.stat:
-        path: "{{ ansible_user_path }}/android/platform-tools"
+        path: "{{ ansible_env.HOME }}/.ansible/sdk/android/platform-tools"
       register: android_platform_tools
 
     - name: Move directory and files
       ansible.builtin.unarchive:
-        src: "{{ ansible_installer_path }}/android/platform-tools-latest-linux.zip"
-        dest: "{{ ansible_user_path }}/android/"
+        src: /tmp/platform-tools-latest-linux.zip
+        dest: "{{ ansible_env.HOME }}/.ansible/sdk/android/"
       when: not android_platform_tools.stat.exists

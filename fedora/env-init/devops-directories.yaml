@@ -1,0 +1,101 @@
+---
+- name: Create DevOps directories
+  hosts: localhost
+  gather_facts: true
+
+  tasks:
+    - name: Check DevOps at HOME
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/DevOps"
+      register: devops
+
+    - name: Create DevOps directory
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/DevOps"
+        state: directory
+        mode: '0755'
+      when: not devops.stat.exists
+
+    - name: Get stats of /opt
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/DevOps/opt"
+      register: devops_opt
+
+    - name: Create /opt directory
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/DevOps/opt"
+        state: directory
+        mode: '0755'
+      when: not devops_opt.stat.exists
+
+    - name: Get stats of /bin directory
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/DevOps/bin"
+      register: devops_bin
+
+    - name: Create /bin  directory
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/DevOps/bin"
+        state: directory
+        mode: '0755'
+      when: not devops_bin.stat.exists
+
+    - name: Get stats of /envmanager directory
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/DevOps/envmanager"
+      register: devops_envmanager
+
+    - name: Create /envmanager directory
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/DevOps/envmanager"
+        state: directory
+        mode: '0755'
+      when: not devops_envmanager.stat.exists
+
+    - name: Get stats of /sdk directory
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/DevOps/sdk"
+      register: devops_sdk
+
+    - name: Create /sdk directory
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/DevOps/sdk"
+        state: directory
+        mode: '0755'
+      when: not devops_sdk.stat.exists
+
+    - name: Get stats of /share directory
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/DevOps/share"
+      register: devops_share
+
+    - name: Create /share directory
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/DevOps/share"
+        state: directory
+        mode: '0755'
+      when: not devops_share.stat.exists
+
+    - name: Get stats of /proglang directory
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/DevOps/proglang"
+      register: devops_proglang
+
+    - name: Create /proglang directory
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/DevOps/proglang"
+        state: directory
+        mode: '0755'
+      when: not devops_proglang.stat.exists
+
+    - name: Get stats of /packagemanager directory
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/DevOps/packagemanager"
+      register: devops_packagemanager
+
+    - name: Create /packagemanager directory
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/DevOps/packagemanager"
+        state: directory
+        mode: '0755'
+      when: not devops_packagemanager.stat.exists

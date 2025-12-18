@@ -9,12 +9,12 @@
         append_newline: true
         prepend_newline: true
         state: present
-        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-env.bashrc"
+        path: "{{ ansible_env.HOME }}/DevOps/bashrc.d/env.bashrc"
         marker: "# {mark} Ansible"
         block: |
-          export ANSIBLE_HOME="$HOME/.ansible/share/ansible"
+          export ANSIBLE_HOME="$HOME/DevOps/share/ansible"
           export ANSIBLE_CONFIG="$HOME/.config/ansible"
           export ANSIBLE_INVENTORY="$HOME/.config/ansible/inventory.ini"
-          export ANSIBLE_LOCAL_TEMP="$HOME/.ansible/share/ansible/tmp"
-          export ANSIBLE_REMOTE_TEMP="$HOME/.ansible/share/ansible/tmp"
+          export ANSIBLE_LOCAL_TEMP="$HOME/DevOps/share/ansible/tmp"
+          export ANSIBLE_REMOTE_TEMP="$HOME/DevOps/share/ansible/tmp"
           export ANSIBLE_TRANSPORT=local

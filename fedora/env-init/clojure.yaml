@@ -10,6 +10,6 @@
         prepend_newline: true
         marker: "# {mark} Clojure"
         state: present
-        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-path.bashrc"
+        path: "{{ ansible_env.HOME }}/DevOps/.bashrc.d/path.bashrc"
         block: |
-          export PATH="$PATH:${HOME}/.ansible/opt/infrastructure/clojure/bin"
+          export PATH="$PATH:${HOME}/DevOps/opt/infrastructure/clojure/bin"

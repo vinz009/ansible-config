@@ -11,8 +11,6 @@
       - xz
       - zip
       - mesa-libGLU
-  vars_files:
-    - ../vars/vars_all.yaml
 
   tasks:
     - name: Install fedora packages flutter package prerequisites

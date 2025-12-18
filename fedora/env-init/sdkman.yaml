@@ -9,7 +9,7 @@
         append_newline: true
         prepend_newline: true
         state: present
-        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-env.bashrc"
+        path: "{{ ansible_env.HOME }}/DevOps/bashrc.d/env.bashrc"
         marker: "# {mark} SDKman"
         block: |
-          export SDKMAN_DIR="$HOME/.usr/share/sdkman"
+          export SDKMAN_DIR="$HOME/DevOps/sdk/sdkman"

@@ -10,10 +10,10 @@
         prepend_newline: true
         marker: "# {mark} Android"
         state: present
-        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-env.bashrc"
+        path: "{{ ansible_env.HOME }}/DevOps/bashrc.d/env.bashrc"
         block: |
-          export ANDROID_HOME="$HOME/.usr/share/android"
-          export ANDROID_USER_HOME="$HOME/.usr/share/android"
+          export ANDROID_HOME="$HOME/DevOps/sdk/android"
+          export ANDROID_USER_HOME="$HOME/DevOps/sdk/android"
 
     - name: Set android environment path
       ansible.builtin.blockinfile:
@@ -21,7 +21,7 @@
         prepend_newline: true
         marker: "# {mark} Android"
         state: present
-        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-path.bashrc"
+        path: "{{ ansible_env.HOME }}/DevOps/bashrc.d/path.bashrc"
         block: |
           export PATH="$PATH:$ANDROID_HOME/cmdline-tools/latest/bin"
           export PATH="$PATH:$ANDROID_HOME/tools"

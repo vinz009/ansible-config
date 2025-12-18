@@ -10,9 +10,9 @@
         prepend_newline: true
         marker: "# {mark} Go"
         state: present
-        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-env.bashrc"
+        path: "{{ ansible_env.HOME }}/DevOps/bashrc.d/env.bashrc"
         block: |
-          export GOPATH="$HOME/.ansible/proglang/go"
+          export GOPATH="$HOME/DevOps/proglang/go"
 
     - name: Set go environment path
       ansible.builtin.blockinfile:
@@ -20,7 +20,7 @@
         prepend_newline: true
         marker: "# {mark} Go"
         state: present
-        path: "{{ ansible_env.HOME }}/.bashrc.d/ansible-path.bashrc"
+        path: "{{ ansible_env.HOME }}/DevOps/bashrc.d/path.bashrc"
         block: |
           export PATH="$PATH:/usr/local/go/bin"
-          export PATH="$PATH:$HOME/.ansible/proglang/go/bin"
+          export PATH="$PATH:$HOME/DevOps/proglang/go/bin"

@@ -1,0 +1,41 @@
+---
+- name: Create devops environment variables for path and env
+  hosts: localhost
+  gather_facts: true
+
+  tasks:
+    - name: Ensure Devops ENV bashrc exist
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/DevOps/bashrc.d/env.bashrc"
+      register: devops_env_bashrc
+
+    - name: Create Devops ENV bashrc if not created
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/DevOps/bashrc.d/env.bashrc"
+        state: touch
+        mode: '0644'
+      when: not devops_env_bashrc.stat.exists
+
+    - name: Ensure Devops PATH bashrc exist
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/DevOps/bashrc.d/path.bashrc"
+      register: devops_path_bashrc
+
+    - name: Create Devops PATH bashrc if not created
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/DevOps/bashrc.d/path.bashrc"
+        state: touch
+        mode: '0644'
+      when: not devops_path_bashrc.stat.exists
+
+    - name: Ensure Devops UTIL bashrc exist
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/DevOps/bashrc.d/util.bashrc"
+      register: devops_util_bashrc
+
+    - name: Create Devops UTIL bashrc if not created
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/DevOps/bashrc.d/util.bashrc"
+        state: touch
+        mode: '0644'
+      when: not devops_util_bashrc.stat.exists
