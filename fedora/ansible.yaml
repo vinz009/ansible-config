@@ -1,0 +1,17 @@
+---
+- name: Create ansible directories
+  hosts: localhost
+  gather_facts: true
+
+  tasks:
+    - name: Check ansible at DevOps
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/DevOps/share/ansible/tmp"
+      register: devops
+
+    - name: Create ansible directory
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/DevOps/share/ansible/tmp"
+        state: directory
+        mode: '0755'
+      when: not devops.stat.exists

@@ -13,3 +13,25 @@
         marker: "# {mark} SDKman"
         block: |
           export SDKMAN_DIR="$HOME/DevOps/sdk/sdkman"
+
+    - name: Check sdkman.bashrc
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/DevOps/bashrc.d/sdkman.bashrc"
+      register: sdkman_bashrc
+
+    - name: Create sdkman.bashrc
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/DevOps/bashrc.d/sdkman.bashrc"
+        state: touch
+        mode: '0644'
+      when: not sdkman_bashrc.stat.exists
+
+    - name: Source sdkman.bashrc
+      ansible.builtin.blockinfile:
+        append_newline: true
+        prepend_newline: true
+        marker: "# {mark} Sdkman"
+        state: present
+        path: "{{ ansible_env.HOME }}/DevOps/bashrc.d/sdkman.bashrc"
+        block: |
+          source "$HOME/DevOps/sdk/sdkman/bin/sdkman-init.sh"

@@ -16,6 +16,18 @@
         mode: '0755'
       when: not devops.stat.exists
 
+    - name: Get stats of /bashrc.d
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/DevOps/bashrc.d"
+      register: devops_opt
+
+    - name: Create /bashrc.d directory
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/DevOps/bashrc.d"
+        state: directory
+        mode: '0755'
+      when: not devops_opt.stat.exists
+
     - name: Get stats of /opt
       ansible.builtin.stat:
         path: "{{ ansible_env.HOME }}/DevOps/opt"
