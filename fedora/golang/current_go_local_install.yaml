@@ -1,0 +1,15 @@
+    - name: Extract message
+      ansible.builtin.set_fact:
+        go_current_version: "{{ go_command.stdout | regex_search('go(0|[1-9]).(0|[1-9])*.(0|[1-9])') }}"
+      when: go_command.rc == 0
+
+    - name: Import url
+      ansible.builtin.import_tasks: ./util/go_url_current_version.yaml
+
+    - name: Diff version
+      ansible.builtin.meta: end_play
+      when: go_current_version == go_latest_stable_version
+
+    - name: Download golang binary
+      ansible.builtin.import_tasks: ./util/go_download_binary.yaml
+      when: go_current_version != go_lastest_stable_version

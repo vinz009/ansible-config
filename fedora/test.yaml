@@ -1,0 +1,10 @@
+---
+- name: Test
+  hosts: localhost
+  gather_facts: true
+
+  tasks:
+    - name: Check version
+      ansible.builtin.command:
+        cmd: lang
+      register: gover

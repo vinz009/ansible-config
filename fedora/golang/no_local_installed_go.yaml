@@ -1,0 +1,5 @@
+- name: Download go url
+  ansible.builtin.import_tasks: ./util/go_url_current_version.yaml
+
+- name: Download go binary
+  ansible.builtin.import_tasks: ./util/go_download_binary.yaml

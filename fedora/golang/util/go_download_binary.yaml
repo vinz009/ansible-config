@@ -1,0 +1,42 @@
+   - name: Extract go sha256 from linux amd64 installer
+     ansible.builtin.set_fact:
+       go_sha256: "{{ go_response_url.json[0].files[14].sha256 }}"
+
+   - name: Verify version
+     ansible.builtin.debug:
+       msg:
+         - "{{ go_latest_stable_version }}"
+         - "{{ go_sha256 }}"
+
+   - name: Create golang directory
+     ansible.builtin.file:
+       path: "{{ ansible_env.HOME }}/DevOps/proglang/go"
+       state: directory
+       mode: '0755'
+
+   - name: Check if tarfile already exists
+     ansible.builtin.stat:
+       path: "/tmp/{{ go_latest_stable_version }}.linux-amd64.tar.gz"
+     register: go_tar_file
+
+   - name: Download source code with checksum (sha256)
+     ansible.builtin.get_url:
+       url: https://go.dev/dl/{{ go_latest_stable_version }}.linux-amd64.tar.gz
+       dest: /tmp
+       checksum: "sha256:{{ go_sha256 }}"
+       mode: '0644'
+     when: not go_tar_file.stat.exists
+
+   - name: Remove old golang install
+     become: true
+     ansible.builtin.shell:
+       cmd: "rm -rf /usr/local/go && tar -C /usr/local -xzf /tmp/{{ go_latest_stable_version }}.linux-amd64.tar.gz"
+       chdir: "{{ ansible_env.HOME }}/DevOps/proglang/go"
+     register: my_output
+     changed_when: my_output.rc != 0
+
+   - name: Check go command
+     ansible.builtin.command:
+       cmd: go version
+     register: my_output
+     changed_when: my_output.rc != 0

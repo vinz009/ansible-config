@@ -1,0 +1,9 @@
+- name: Download ll
+  ansible.builtin.uri:
+    url: https://go.dev/dl/?mode=json
+    return_content: true
+  register: go_response_url
+
+- name: Extract go version from json output
+  ansible.builtin.set_fact:
+    go_latest_stable_version: "{{ go_response_url.json[0].version }}"
