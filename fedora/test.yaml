@@ -4,7 +4,8 @@
   gather_facts: true
 
   tasks:
-    - name: Check version
-      ansible.builtin.command:
-        cmd: lang
-      register: gover
+    - name: Check
+      ansible.builtin.shell: "/home/vinz/DevOps/sdk/sdkman/bin/sdkman-init.sh"
+      args:
+        chdir: "/home/vinz/DevOps/sdk/sdkman/bin"
+        executable: "/bin/bash"

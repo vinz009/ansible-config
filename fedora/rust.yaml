@@ -2,19 +2,17 @@
 - name: Rust Installer
   hosts: localhost
   gather_facts: true
-  vars_files:
-    - ../vars/vars_all.yaml
 
   tasks:
     - name: Create cargo directory
       ansible.builtin.file:
-        path: "{{ ansible_user_path }}/cargo"
+        path: "{{ ansible_env.HOME }}/DevOps/packagemanager/cargo"
         state: directory
         mode: '0755'
 
     - name: Create rustup directory
       ansible.builtin.file:
-        path: "{{ ansible_user_path }}/rustup"
+        path: "{{ ansible_env.HOME }}/DevOps/envmanager/rustup"
         state: directory
         mode: '0755'
 

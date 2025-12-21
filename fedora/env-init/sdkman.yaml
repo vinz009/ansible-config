@@ -35,3 +35,13 @@
         path: "{{ ansible_env.HOME }}/DevOps/bashrc.d/sdkman.bashrc"
         block: |
           source "$HOME/DevOps/sdk/sdkman/bin/sdkman-init.sh"
+
+    - name: Add path sdk
+      ansible.builtin.blockinfile:
+        append_newline: true
+        prepend_newline: true
+        marker: "# {mark} Sdkman"
+        state: present
+        path: "{{ ansible_env.HOME }}/DevOps/bashrc.d/path.bashrc"
+        block: |
+          export PATH="$HOME/DevOps/sdk/sdkman/bin/sdkman-init.sh"

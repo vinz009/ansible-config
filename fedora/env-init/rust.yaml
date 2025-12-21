@@ -12,8 +12,9 @@
         state: present
         path: "{{ ansible_env.HOME }}/DevOps/bashrc.d/env.bashrc"
         block: |
-          export RUSTUP_HOME="$HOME/DevOps/share/rustup"
-          export CARGO_HOME="$HOME/DevOps/proglang/cargo"
+          export RUSTUP_HOME="$HOME/DevOps/envmanager/rustup"
+          export RUSTUP_TERM_WIDTH=80
+          export CARGO_HOME="$HOME/DevOps/packagemanager/cargo"
 
     - name: Set rust environment path
       ansible.builtin.blockinfile:
@@ -23,7 +24,7 @@
         state: present
         path: "{{ ansible_env.HOME }}/DevOps/bashrc.d/path.bashrc"
         block: |
-          export PATH="$PATH:$HOME/DevOps/proglang/cargo/bin"
+          export PATH="$PATH:$HOME/DevOps/packagemanager/cargo/bin"
 
     - name: Set rust environment util
       ansible.builtin.blockinfile:
@@ -33,4 +34,4 @@
         state: present
         path: "{{ ansible_env.HOME }}/DevOps/bashrc.d/util.bashrc"
         block: |
-          source "{{ ansible_env.HOME }}/DevOps/proglang/cargo/env"
+          source "{{ ansible_env.HOME }}/DevOps/packagemanager/cargo/env"
