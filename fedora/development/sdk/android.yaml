@@ -3,7 +3,7 @@
   hosts: localhost
   gather_facts: true
   vars:
-    android_sdk_cli_version: 13114758
+    android_sdk_cli_version: "{{ version }}"
     android_fedora_packages:
       - zlib-ng.i686
       - ncurses-libs.i686

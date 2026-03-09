@@ -1,0 +1,13 @@
+---
+- name: Install fedora packages
+  hosts: localhost
+  become: true
+
+  tasks:
+    - name: Install devops tools
+      ansible.builtin.dnf:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - "opentofu"
+	- "podman"

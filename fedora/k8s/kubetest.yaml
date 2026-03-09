@@ -1,0 +1,28 @@
+---
+- name: Kubernetes kubectl Installation/Update
+  hosts: localhost
+
+  tasks:
+    - name: Get cli version
+      ansible.builtin.command:
+        cmd: ~/.local/bin/kubectl version
+      register: kubectl_cli_version
+      ignore_errors: true
+
+    - name: Get cli version
+      ansible.builtin.set_fact:
+        # new_var: "{{ kubectl_cli_version.stdout_lines[0] | regex_search('v.[0-9].[0-9]+.[0-9]', multiline=True, ignorecase=True) }}"
+        new_var: "{{ kubectl_cli_version.stdout_lines[0] | regex_search('v[0-9].[0-9]+.[0-9]') }}"
+
+    - name: newvar
+      ansible.builtin.debug:
+        var: new_var
+    # - name: Get latest kubectl version
+    #   ansible.builtin.uri:
+    #     url: https://dl.k8s.io/release/stable.txt
+    #     return_content: true
+    #   register: kubectl_latest_version
+
+    # - name: End play if kubectl is already installed at /tmp
+    #   ansible.builtin.meta: end_play
+    #   when: kubectl_latest_version == kubectl_cli_version

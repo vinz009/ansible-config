@@ -24,8 +24,3 @@
           lsmod | grep "kvm"
       register: kvm
       changed_when: 'kvm.rc != 0'
-
-    - name: Install podman
-      ansible.builtin.dnf:
-        name: 'podman'
-        state: present
