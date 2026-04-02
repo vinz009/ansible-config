@@ -1,0 +1,8 @@
+---
+directory:
+  iac: "{{ ansible_facts['env']['HOME'] }}/.iac"
+  bashrcd: "{{ ansible_facts['env']['HOME'] }}/.iac/bashrc.d"
+bashrc:
+  env: "{{ ansible_facts['env']['HOME'] }}/.iac/bashrc.d/env.bashrc"
+  path: "{{ ansible_facts['env']['HOME'] }}/.iac/bashrc.d/path.bashrc"
+  util: "{{ ansible_facts['env']['HOME'] }}/.iac/bashrc.d/util.bashrc"
