@@ -2,8 +2,6 @@
 - name: Create .iac directories at home
   hosts: localhost
   gather_facts: true
-  vars_files:
-    - ../vars/global_vars.yml
 
   tasks:
     - name: Check .iac

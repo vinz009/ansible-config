@@ -1,0 +1,6 @@
+---
+- name: dir
+  ansible.builtin.import_playbook: directories.yml
+
+- name: bs
+  ansible.builtin.import_playbook: bashrc.yml

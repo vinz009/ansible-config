@@ -1,0 +1,26 @@
+---
+- name: Set nvmsh environment variable
+  hosts: localhost
+  gather_facts: true
+
+  tasks:
+    - name: Set nvmsh environment variable
+      ansible.builtin.blockinfile:
+        append_newline: true
+        prepend_newline: true
+        state: present
+        path: "{{ bashrc.env }}"
+        marker: "# {mark} Nvmsh"
+        block: |
+          export NVM_DIR="$HOME/DevOps/envmanager/nvm"
+          export NVM_BIN="$HOME/DevOps/bin"
+
+    - name: Set nvmsh environment util
+      ansible.builtin.blockinfile:
+        append_newline: true
+        prepend_newline: true
+        state: present
+        path: "{{ bashrc.util }}"
+        marker: "# {mark} Nvmsh"
+        block: |
+          source "$NVM_DIR/nvm.sh"

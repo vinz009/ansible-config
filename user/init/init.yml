@@ -1,0 +1,17 @@
+---
+- name: dir
+  ansible.builtin.import_playbook: directories.yml
+
+- name: Create iac bashrc.d
+  hosts: localhost
+  gather_facts: true
+
+  tasks:
+    - name: dir
+      ansible.builtin.wait_for:
+        path: "{{ directory.bashrc.d }}"
+        state: present
+        timeout: 3
+
+- name: bs
+  ansible.builtin.import_playbook: bashrc.yml
