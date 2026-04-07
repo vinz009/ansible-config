@@ -1,0 +1,8 @@
+---
+- name: directories
+  ansible.builtin.import_tasks:
+    file: directories.yml
+
+- name: bashrc
+  ansible.builtin.import_tasks:
+    file: bashrc.yml

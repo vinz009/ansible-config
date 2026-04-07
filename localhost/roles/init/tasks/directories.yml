@@ -1,0 +1,24 @@
+---
+- name: Check .iac
+  ansible.builtin.stat:
+    path: "{{ directory.iac }}"
+  register: iac
+
+- name: Create iac directory
+  ansible.builtin.file:
+    path: "{{ directory.iac }}"
+    state: directory
+    mode: '0755'
+  when: not iac.stat.exists
+
+- name: Check /bashrc.d
+  ansible.builtin.stat:
+    path: "{{ directory.bashrcd }}"
+  register: bashrc_d
+
+- name: Create /bashrc.d directory
+  ansible.builtin.file:
+    path: "{{ directory.bashrcd }}"
+    state: directory
+    mode: '0755'
+  when: not bashrc_d.stat.exists

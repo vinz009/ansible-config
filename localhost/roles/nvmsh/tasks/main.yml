@@ -1,0 +1,12 @@
+---
+- name: directories
+  ansible.builtin.import_tasks:
+    file: install-dir.yml
+
+- name: directories
+  ansible.builtin.import_tasks:
+    file: install.yml
+
+- name: bashrc
+  ansible.builtin.import_tasks:
+    file: env.yml

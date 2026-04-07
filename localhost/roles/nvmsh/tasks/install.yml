@@ -1,0 +1,10 @@
+---
+- name: Install nvm script
+  ansible.builtin.shell:
+    cmd: |
+      set -o pipefail
+      PROFILE=/dev/null bash -c 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash'
+  register: nvm_result
+  changed_when: 'nvm_result.rc != 0'
+  environment:
+    NVM_DIR: "{{ directory.iac }}/nvm"

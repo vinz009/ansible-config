@@ -1,0 +1,12 @@
+---
+- name: check nvmsh
+  ansible.builtin.stat:
+    path: "{{ directory.iac }}/nvm"
+  register: nvm_dir
+
+- name: install nvmsh
+  ansible.builtin.file:
+    path: "{{ directory.iac }}/nvm"
+    state: directory
+    mode: '0755'
+  when: not nvm_dir.stat.exists

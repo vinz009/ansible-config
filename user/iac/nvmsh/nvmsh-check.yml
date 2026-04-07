@@ -1,9 +1,0 @@
----
-- name: Check packages
-  hosts: localhost
-  gather_facts: true
-
-  tasks:
-    - name: check nvmsh
-      ansible.builtin.stat:
-	path: /usr/

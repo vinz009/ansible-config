@@ -1,0 +1,36 @@
+---
+  - name: Check env.bashrc
+    ansible.builtin.stat:
+      path: "{{ bashrc.env }}"
+    register: env_bashrc
+
+  - name: Create env.bashrc
+    ansible.builtin.file:
+      path: "{{ bashrc.env }}"
+      state: touch
+      mode: '0644'
+    when: not env_bashrc.stat.exists
+
+  - name: Check path.bashrc
+    ansible.builtin.stat:
+      path: "{{ bashrc.path }}"
+    register: path_bashrc
+
+  - name: Create path.bashrc
+    ansible.builtin.file:
+      path: "{{ bashrc.path }}"
+      state: touch
+      mode: '0644'
+    when: not path_bashrc.stat.exists
+
+  - name: Check util.bashrc
+    ansible.builtin.stat:
+      path: "{{ bashrc.util }}"
+    register: util_bashrc
+
+  - name: Create Devops UTIL bashrc if not created
+    ansible.builtin.file:
+      path: "{{ bashrc.util }}"
+      state: touch
+      mode: '0644'
+    when: not util_bashrc.stat.exists
